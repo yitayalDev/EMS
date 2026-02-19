@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #213547;
+  background-color: #ffffff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+/* ===== DARK MODE ===== */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body,
+.dark #root {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
+/* Cards, panels, modals */
+.dark .bg-white {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #111827 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #1a2332 !important;
+}
+
+/* Text */
+.dark .text-gray-700,
+.dark .text-gray-800,
+.dark .text-gray-900 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-500,
+.dark .text-gray-600 {
+  color: #9ca3af !important;
+}
+
+/* Inputs, selects */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #374151 !important;
+  color: #e5e7eb !important;
+  border-color: #4b5563 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Tables */
+.dark table {
+  color: #e5e7eb;
+}
+
+.dark thead {
+  background-color: #1f2937 !important;
+}
+
+.dark th {
+  color: #d1d5db !important;
+  border-color: #374151 !important;
+}
+
+.dark td {
+  border-color: #374151 !important;
+}
+
+.dark tbody tr:hover {
+  background-color: #374151 !important;
+}
+
+/* Borders */
+.dark .border,
+.dark .border-b,
+.dark .border-t {
+  border-color: #374151 !important;
+}
+
+/* Shadow override for dark cards */
+.dark .shadow,
+.dark .shadow-md,
+.dark .shadow-lg {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3) !important;
+}
+
+/* Scrollbar */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
