@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/24/solid";
-import api from "../../utils/api";
+import api, { BASE_URL } from "../../utils/api";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
@@ -150,7 +150,7 @@ const EmployeeList = ({ highlightId }) => {
                     <td className="px-4 py-3">
                       {emp.image ? (
                         <img
-                          src={`http://localhost:5000${emp.image}`}
+                          src={`${BASE_URL}${emp.image}`}
                           alt={emp.name}
                           className="w-10 h-10 rounded-full object-cover border border-white/50 shadow-md"
                         />

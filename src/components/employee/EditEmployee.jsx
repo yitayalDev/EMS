@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../utils/api.js';
+import api, { BASE_URL } from '../../utils/api.js';
 
 const EditEmployee = () => {
   const { id } = useParams();
@@ -37,7 +37,7 @@ const EditEmployee = () => {
           status: e.status || 'active',
         });
 
-        setPreview(e.image ? `http://localhost:5000${e.image}` : null);
+        setPreview(e.image ? `${BASE_URL}${e.image}` : null);
       } catch (err) {
         console.error(err);
         alert('Failed to load employee data');
@@ -76,7 +76,6 @@ const EditEmployee = () => {
   };
 
   return (
-    {/* PAGE BACKGROUND */}
     <div className="min-h-screen p-6 flex justify-center items-start
                     bg-gradient-to-br from-green-900 via-emerald-900 to-teal-800">
 
