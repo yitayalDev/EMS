@@ -51,11 +51,11 @@ const Login = () => {
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center px-64 py-16
+      className={`min-h-screen flex items-center justify-center px-4 md:px-64 py-10 md:py-16
       bg-gradient-to-r ${gradients[gradientIndex]} transition-all duration-1000`}
     >
-      <div className="bg-black/50 p-16 rounded-xl w-full max-w-md shadow-lg">
-        <h1 className="text-3xl font-bold text-white mb-6 text-center">
+      <div className="bg-black/50 p-6 md:p-16 rounded-xl w-full max-w-md shadow-lg">
+        <h1 className="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
           EMS Login
         </h1>
 
@@ -94,9 +94,8 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-3 rounded text-blue-400 bg-blue-500 shadow-lg border border-blue-300 transition-all duration-300 hover:bg-blue-600 animate-pulse-button ${
-              isLoading ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
+            className={`w-full py-3 rounded text-blue-400 bg-blue-500 shadow-lg border border-blue-300 transition-all duration-300 hover:bg-blue-600 animate-pulse-button ${isLoading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>

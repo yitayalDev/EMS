@@ -2,7 +2,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { useTheme } from '../../context/ThemeContext.jsx';
 import { useState, useEffect } from 'react';
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   const { user, logout } = useAuth();
   const { darkMode, toggleDarkMode } = useTheme();
 
@@ -19,18 +19,39 @@ const Navbar = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setGradientIndex(prev => (prev + 1) % gradients.length);
+      setGradientIndex((prev) => (prev + 1) % gradients.length);
     }, 2000); // change every 2 seconds
     return () => clearInterval(interval);
   }, []);
 
   return (
     <header
-      className={`bg-gradient-to-r ${gradients[gradientIndex]} shadow-lg flex items-center justify-between px-6 py-3 transition-all duration-1000 overflow-hidden`}
+      className={`bg-gradient-to-r ${gradients[gradientIndex]} shadow-lg flex items-center justify-between px-4 md:px-6 py-3 transition-all duration-1000 overflow-hidden`}
     >
+      {/* Mobile Toggle Toggle */}
+      <button
+        onClick={toggleSidebar}
+        className="p-2 mr-2 text-white md:hidden hover:bg-white/20 rounded-lg transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+
       {/* Large Marquee Welcome Text */}
       <div className="flex-1 overflow-hidden relative">
-        <span className="animate-marquee whitespace-nowrap text-white font-extrabold text-4xl drop-shadow-md">
+        <span className="animate-marquee whitespace-nowrap text-white font-extrabold text-2xl md:text-4xl drop-shadow-md">
           Welcome {user?.role === 'admin' ? 'Admin' : user?.name}
         </span>
       </div>

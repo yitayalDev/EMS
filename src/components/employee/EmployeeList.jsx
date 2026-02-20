@@ -79,32 +79,34 @@ const EmployeeList = ({ highlightId }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-800 p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white drop-shadow-lg">Employees</h2>
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <h2 className="text-2xl font-bold text-white drop-shadow-lg text-center md:text-left">
+          Employees
+        </h2>
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
           <button
             onClick={exportPDF}
-            className="px-4 py-2 text-sm font-semibold text-white rounded-xl
+            className="flex-1 md:flex-none px-3 md:px-4 py-2 text-xs md:text-sm font-semibold text-white rounded-xl
                        bg-gradient-to-r from-red-500 to-red-700
                        border border-red-400 hover:scale-105
                        shadow-[0_0_8px_#f87171] hover:shadow-[0_0_12px_#f87171]
                        transition-all duration-200"
           >
-            📄 Export PDF
+            📄 PDF
           </button>
           <button
             onClick={exportExcel}
-            className="px-4 py-2 text-sm font-semibold text-white rounded-xl
+            className="flex-1 md:flex-none px-3 md:px-4 py-2 text-xs md:text-sm font-semibold text-white rounded-xl
                        bg-gradient-to-r from-emerald-500 to-emerald-700
                        border border-emerald-400 hover:scale-105
                        shadow-[0_0_8px_#34d399] hover:shadow-[0_0_12px_#34d399]
                        transition-all duration-200"
           >
-            📊 Export Excel
+            📊 Excel
           </button>
           <Link
             to="/admin/employees/add"
-            className="group flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-xl
+            className="w-full md:w-auto group flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-semibold text-white rounded-xl
                        bg-gradient-to-r from-green-500 to-green-700
                        border-2 border-green-400
                        shadow-[0_0_10px_#22c55e,0_0_20px_#16a34a,0_0_30px_#15803d]
@@ -114,29 +116,33 @@ const EmployeeList = ({ highlightId }) => {
                        transition-all duration-200 ease-in-out
                        animate-neon-pulse"
           >
-            <PlusIcon className="w-5 h-5 transform group-hover:rotate-12 group-hover:scale-125 transition-all duration-200" />
+            <PlusIcon className="w-4 h-4 md:w-5 md:h-5 transform group-hover:rotate-12 group-hover:scale-125 transition-all duration-200" />
             Add Employee
           </Link>
         </div>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden p-1">
+      <div className="relative rounded-2xl p-1">
         <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-lime-400 to-emerald-500 blur-xl opacity-70 animate-neon-border rounded-2xl"></div>
 
-        <div className="relative bg-white/10 backdrop-blur-md rounded-2xl shadow-lg overflow-x-auto hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+        <div className="relative bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 overflow-x-auto hover:shadow-xl transition-all duration-300">
           {loading ? (
             <div className="p-6 text-center text-white">Loading employees...</div>
           ) : employees.length === 0 ? (
-            <div className="p-6 text-center text-green-300">No employees found.</div>
+            <div className="p-6 text-center text-green-300">
+              No employees found.
+            </div>
           ) : (
-            <table className="min-w-full text-sm text-white">
+            <table className="min-w-full text-xs md:text-sm text-white">
               <thead className="bg-gradient-to-r from-purple-800 via-indigo-800 to-blue-800/70 border-b border-purple-500">
                 <tr>
-                  <th className="px-4 py-3 text-left">No.</th>
-                  <th className="px-4 py-3 text-left">Image</th>
-                  <th className="px-4 py-3 text-left">Name</th>
-                  <th className="px-4 py-3 text-left">Department</th>
-                  <th className="px-4 py-3 text-left">Action</th>
+                  <th className="px-3 md:px-4 py-3 text-left">No.</th>
+                  <th className="px-3 md:px-4 py-3 text-left">Image</th>
+                  <th className="px-3 md:px-4 py-3 text-left">Name</th>
+                  <th className="px-3 md:px-4 py-3 text-left hidden sm:table-cell">
+                    Department
+                  </th>
+                  <th className="px-3 md:px-4 py-3 text-left">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,40 +150,47 @@ const EmployeeList = ({ highlightId }) => {
                   <tr
                     key={emp._id}
                     className={`border-t border-purple-600 hover:bg-purple-700/30 hover:shadow-[0_0_15px_#22c55e] transition-all duration-200
-                                ${highlightId === emp._id ? "animate-pulse bg-purple-700/40" : ""}`}
+                                ${highlightId === emp._id
+                        ? 'animate-pulse bg-purple-700/40'
+                        : ''
+                      }`}
                   >
-                    <td className="px-4 py-3">{i + 1}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-3 md:px-4 py-3">{i + 1}</td>
+                    <td className="px-3 md:px-4 py-3">
                       {emp.image ? (
                         <img
                           src={`${BASE_URL}${emp.image}`}
                           alt={emp.name}
-                          className="w-10 h-10 rounded-full object-cover border border-white/50 shadow-md"
+                          className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border border-white/50 shadow-md"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs">
+                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-400 flex items-center justify-center text-white text-[10px] md:text-xs">
                           N/A
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3 font-medium">{emp.name}</td>
-                    <td className="px-4 py-3">{emp.department?.name || "-"}</td>
-                    <td className="px-4 py-3 space-x-2">
+                    <td className="px-3 md:px-4 py-3 font-medium">
+                      {emp.name}
+                    </td>
+                    <td className="px-3 md:px-4 py-3 hidden sm:table-cell">
+                      {emp.department?.name || '-'}
+                    </td>
+                    <td className="px-3 md:px-4 py-3 space-y-1 sm:space-y-0 sm:space-x-2 flex flex-col sm:flex-row">
                       <Link
                         to={`/admin/employees/${emp._id}`}
-                        className="text-xs text-yellow-300 px-2 py-1 rounded bg-white hover:bg-yellow-100 hover:text-yellow-600 transition-all duration-200 shadow-sm"
+                        className="text-[10px] md:text-xs text-center text-yellow-300 px-2 py-1 rounded bg-white/10 hover:bg-yellow-300 hover:text-black transition-all duration-200 shadow-sm border border-yellow-300/30"
                       >
                         View
                       </Link>
                       <Link
                         to={`/admin/employees/${emp._id}/edit`}
-                        className="text-xs text-pink-400 px-2 py-1 rounded bg-white hover:bg-pink-100 hover:text-pink-600 transition-all duration-200 shadow-sm"
+                        className="text-[10px] md:text-xs text-center text-pink-400 px-2 py-1 rounded bg-white/10 hover:bg-pink-400 hover:text-white transition-all duration-200 shadow-sm border border-pink-400/30"
                       >
                         Edit
                       </Link>
                       <button
                         onClick={() => setConfirmDeleteId(emp._id)}
-                        className="text-xs text-red-400 px-2 py-1 rounded bg-white hover:bg-red-100 hover:text-red-600 transition-all duration-200 shadow-sm"
+                        className="text-[10px] md:text-xs text-center text-red-400 px-2 py-1 rounded bg-white/10 hover:bg-red-400 hover:text-white transition-all duration-200 shadow-sm border border-red-400/30"
                       >
                         Delete
                       </button>

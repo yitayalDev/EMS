@@ -19,11 +19,13 @@ import DashboardCharts from "../components/dashboard/DashboardCharts.jsx";
 import api from "../utils/api.js";
 
 const AdminDashboard = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <div className="flex bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-300">
-      <AdminSidebar />
+      <AdminSidebar mobileOpen={isSidebarOpen} setMobileOpen={setIsSidebarOpen} />
       <div className="flex flex-col flex-1">
-        <Navbar />
+        <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <main className="p-4 space-y-4">
           <Routes>
             {/* Dashboard summary */}
