@@ -20,12 +20,5 @@ router.post('/reset-password/:token', resetPassword); // uses token to reset
 // Optional: logged-in user password update
 // router.put('/update-password', protect, updatePassword);
 
-router.post(
-  '/create-employee',
-  protect,
-  authorize('admin'),
-  upload.single('image'),
-  createEmployeeAccount
-);
 
 module.exports = router;

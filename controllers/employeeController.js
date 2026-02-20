@@ -15,14 +15,11 @@ const createEmployee = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already exists' });
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create User
+    // Create User (User model handles bcrypt hashing automatically)
     const user = new User({
       name,
       email,
-      password: hashedPassword,
+      password, // Plain text here, hashed in pre-save
       role: 'employee',
     });
     await user.save();
@@ -36,7 +33,6 @@ const createEmployee = async (req, res) => {
       user: user._id,
       name,
       email,
-      password: hashedPassword,
       dob,
       joinDate: joinDate || new Date(),
       department: departmentId,
@@ -53,7 +49,7 @@ const createEmployee = async (req, res) => {
     res.status(201).json({ message: 'Employee created successfully', user, employee });
   } catch (err) {
     console.error('Error creating employee:', err);
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: 'Server error: ' + err.message });
   }
 };
 

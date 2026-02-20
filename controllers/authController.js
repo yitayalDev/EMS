@@ -39,49 +39,6 @@ exports.login = async (req, res) => {
   }
 };
 
-// ---------------- CREATE EMPLOYEE (admin only) ----------------
-exports.createEmployeeAccount = async (req, res) => {
-  try {
-    const { name, email, password, departmentId, dob, position } = req.body;
-
-    if (!name || !email || !password || !departmentId || !dob || !position) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const exist = await User.findOne({ email });
-    if (exist) return res.status(400).json({ message: 'Email already exists' });
-
-    const user = new User({ name, email, password, role: 'employee' });
-    await user.save();
-
-    let imagePath = '';
-    if (req.file) imagePath = `/upload/${req.file.filename}`;
-
-    const employee = new Employee({
-      user: user._id,
-      name,
-      email,
-      department: departmentId,
-      dob,
-      position,
-      image: imagePath,
-    });
-    await employee.save();
-
-    user.employee = employee._id;
-    await user.save();
-
-    res.status(201).json({
-      message: 'Employee account created',
-      user,
-      employee,
-    });
-
-  } catch (err) {
-    console.error('Error creating employee:', err);
-    res.status(500).json({ message: 'Server error', error: err.message });
-  }
-};
 
 // ================= ADD ONLY BELOW =================
 
