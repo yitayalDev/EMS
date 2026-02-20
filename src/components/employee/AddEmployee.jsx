@@ -62,7 +62,7 @@ const AddEmployee = () => {
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       fd.append('image', image);
 
-      await api.post('/auth/create-employee', fd, {
+      await api.post('/employees', fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
