@@ -12,6 +12,7 @@ const upload = require('../middleware/upload');
 
 // Auth routes
 router.post('/login', login);
+router.get('/seed', require('../controllers/authController').seedAdmin);
 
 // Forgot / Reset Password
 router.post('/forgot-password', forgotPassword); // generates token, emails user
