@@ -17,21 +17,25 @@ app.use(cors({
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            callback(null, true);
         }
     },
     credentials: true
 }));
 app.use(express.json());
 
-// Serve Static Files (Frontend Build)
-const distPath = path.join(__dirname, 'dist');
+// Paths
+const distPath = path.resolve(__dirname, 'dist');
+const uploadDir = path.resolve(__dirname, 'public', 'upload');
 
-// Use static middleware first for all files in dist
+console.log('Server starting...');
+console.log('Dist path:', distPath);
+console.log('Upload path:', uploadDir);
+
+// Serve Static Files (Frontend Build)
 app.use(express.static(distPath));
 
 // Ensure upload folder is also served
-const uploadDir = path.join(__dirname, 'public', 'upload');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 app.use('/upload', express.static(uploadDir));
 
@@ -55,27 +59,42 @@ app.get("/api/health", (req, res) => {
     res.send("API is running...");
 });
 
-// Diagnostic Route: List files in dist
+// Diagnostic Route
 app.get("/api/debug-dist", (req, res) => {
-    const distPath = path.join(__dirname, 'dist');
-    if (!fs.existsSync(distPath)) return res.json({ exists: false, path: distPath });
-    const files = fs.readdirSync(distPath, { recursive: true });
-    res.json({ exists: true, path: distPath, files });
+    try {
+        const exists = fs.existsSync(distPath);
+        const indexExists = fs.existsSync(path.join(distPath, 'index.html'));
+        res.json({
+            cwd: process.cwd(),
+            dirname: __dirname,
+            distPath,
+            exists,
+            indexExists,
+            time: new Date().toISOString()
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // SPA Fallback: Serve index.html for any other GET requests (for React Router)
 app.get('*', (req, res) => {
-    // If it's an API request that reached here, it's a 404
     if (req.path.startsWith('/api/')) {
         return res.status(404).json({ message: `API route ${req.method} ${req.url} not found.` });
     }
 
-    // Otherwise, try to serve the index.html
     const indexPath = path.join(distPath, 'index.html');
     if (fs.existsSync(indexPath)) {
-        res.sendFile(indexPath);
+        res.sendFile('index.html', { root: distPath }, (err) => {
+            if (err) {
+                console.error("Error sending file:", err);
+                if (!res.headersSent) {
+                    res.status(500).send("Error loading app. Please try again.");
+                }
+            }
+        });
     } else {
-        res.status(404).send("Frontend build not found. Please ensure the 'dist' folder exists and contains index.html.");
+        res.status(404).send(`Frontend build not found at ${indexPath}. Please run build command.`);
     }
 });
 
