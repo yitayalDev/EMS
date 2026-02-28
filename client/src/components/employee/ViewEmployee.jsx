@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import api from "../../utils/api";
+import api, { API_BASE_URL } from "../../utils/api";
 
 const ViewEmployee = () => {
   const { id } = useParams();
@@ -38,7 +38,7 @@ const ViewEmployee = () => {
 
         {emp.image && (
           <img
-            src={`http://localhost:5000${emp.image}`}
+            src={`${API_BASE_URL}${emp.image}`}
             alt={emp.name}
             className="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-white/50 shadow-[0_0_20px_#22c55e]"
           />

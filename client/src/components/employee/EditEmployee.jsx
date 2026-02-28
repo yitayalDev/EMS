@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../utils/api.js';
+import api, { API_BASE_URL } from '../../utils/api.js';
 
 const EditEmployee = () => {
   const { id } = useParams();
@@ -46,7 +46,7 @@ const EditEmployee = () => {
           permissions: e.user?.permissions || [],
         });
 
-        setPreview(e.image ? `http://localhost:5000${e.image}` : null);
+        setPreview(e.image ? `${API_BASE_URL}${e.image}` : null);
       } catch (err) {
         console.error(err);
         alert('Failed to load employee data');
@@ -90,8 +90,8 @@ const EditEmployee = () => {
       await api.put(`employees/${id}/permissions`, permForm);
       alert('Role and permissions updated successfully!');
     } catch (err) {
-      console.error('Update Permission Error:', err);
-      alert(err.response?.data?.message || 'Failed to update permissions');
+      console.error('Update Permission Error Full:', err);
+      alert(`Error ${err.response?.status || 'Unknown'}: ${err.response?.data?.message || err.message}\nURL: ${err.config?.url}`);
     }
   };
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
-import api from '../../utils/api.js';
+import api, { API_BASE_URL } from '../../utils/api.js';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -63,7 +63,7 @@ const Profile = () => {
 
             {employee.image && (
               <img
-                src={`http://localhost:5000${employee.image}`}
+                src={`${API_BASE_URL}${employee.image}`}
                 alt={employee.name}
                 className="w-32 h-32 rounded-full object-cover border-2 border-green-600 shadow-md relative z-10"
               />
