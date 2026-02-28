@@ -9,11 +9,11 @@ import EditDepartment from "../components/department/EditDepartment.jsx";
 import EmployeeList from "../components/employee/EmployeeList.jsx";
 import AddEmployee from "../components/employee/AddEmployee.jsx";
 import ViewEmployee from "../components/employee/ViewEmployee.jsx";
-import LeaveList from "../components/leave/LeaveList.jsx";
-import LeaveDetails from "../components/leave/LeaveDetails.jsx";
+import LeaveList from "../components/leaves/LeaveList.jsx";
+import LeaveDetails from "../components/leaves/LeaveDetails.jsx";
 import SalaryList from "../components/salary/SalaryList.jsx";
 import AddSalary from "../components/salary/AddSalary.jsx";
-import AdminSettings from "../pages/AdminSettings.jsx";
+import Setting from "../components/employeeDashboard/Setting.jsx";
 import { useState, useEffect } from "react";
 import api from "../utils/api";
 
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
               </>
             )}
 
-            <Route path="settings" element={<AdminSettings />} />
+            <Route path="settings" element={<Setting />} />
           </Routes>
         </main>
       </div>
@@ -94,8 +94,8 @@ const EditEmployeeInline = () => {
     const load = async () => {
       try {
         const [empRes, depRes] = await Promise.all([
-          api.get(`/employees/${id}`),
-          api.get("/departments"),
+          api.get(`employees/${id}`),
+          api.get("departments"),
         ]);
 
         const emp = empRes.data;
@@ -129,7 +129,7 @@ const EditEmployeeInline = () => {
     if (image) fd.append("image", image);
 
     try {
-      await api.put(`/employees/${id}`, fd, {
+      await api.put(`employees/${id}`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       navigate("/admin/employees");
@@ -155,7 +155,7 @@ const EditEmployeeInline = () => {
   const handlePermSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/employees/${id}/permissions`, permForm);
+      await api.put(`employees/${id}/permissions`, permForm);
       alert("Role and permissions updated successfully!");
     } catch (err) {
       console.error(err);

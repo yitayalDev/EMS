@@ -13,7 +13,7 @@ const Setting = () => {
     e.preventDefault();
     setMessage('');
     try {
-      const { data } = await api.post('/settings/change-password', {
+      const { data } = await api.post('settings/change-password', {
         currentPassword,
         newPassword,
       });
@@ -44,10 +44,9 @@ const Setting = () => {
       {message && (
         <div
           className={`mb-4 text-sm rounded-lg px-4 py-2 border
-            ${
-              type === 'success'
-                ? 'text-green-700 bg-green-100/80 border-green-300 dark:bg-green-900/30 dark:text-green-300'
-                : 'text-red-700 bg-red-100/80 border-red-300 dark:bg-red-900/30 dark:text-red-300'
+            ${type === 'success'
+              ? 'text-green-700 bg-green-100/80 border-green-300 dark:bg-green-900/30 dark:text-green-300'
+              : 'text-red-700 bg-red-100/80 border-red-300 dark:bg-red-900/30 dark:text-red-300'
             }`}
         >
           {message}

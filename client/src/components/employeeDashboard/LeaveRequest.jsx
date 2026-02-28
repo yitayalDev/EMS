@@ -20,7 +20,7 @@ const LeaveRequest = ({ onSubmitted }) => {
   useEffect(() => {
     const loadDepartments = async () => {
       try {
-        const { data } = await api.get('/departments');
+        const { data } = await api.get('departments');
         setDepartments(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Failed to load departments:', err);
@@ -60,7 +60,7 @@ const LeaveRequest = ({ onSubmitted }) => {
       fd.append('reason', form.reason);
       if (file) fd.append('file', file);
 
-      const { data } = await api.post('/leaves', fd, {
+      const { data } = await api.post('leaves', fd, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 

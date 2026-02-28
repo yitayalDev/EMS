@@ -12,7 +12,7 @@ const MyLeaves = ({ leaves, setLeaves }) => {
       if (!user?.employeeId) return;
 
       try {
-        const { data } = await api.get('/leaves/my');
+        const { data } = await api.get('leaves/my');
         setLeaves(data);
       } catch (err) {
         console.error('Failed to fetch leaves:', err);
@@ -73,13 +73,12 @@ const MyLeaves = ({ leaves, setLeaves }) => {
                 <td className="p-2">{l.leaveType}</td>
 
                 <td
-                  className={`p-2 font-bold ${
-                    l.status === 'approved'
+                  className={`p-2 font-bold ${l.status === 'approved'
                       ? 'text-green-400'
                       : l.status === 'rejected'
-                      ? 'text-red-400'
-                      : 'text-yellow-400'
-                  }`}
+                        ? 'text-red-400'
+                        : 'text-yellow-400'
+                    }`}
                 >
                   {l.status}
                 </td>

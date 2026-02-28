@@ -12,7 +12,7 @@ const AdminSummary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await api.get('/dashboard/admin');
+        const { data } = await api.get('dashboard/admin');
         setStats(data);
       } catch {
         // ignore

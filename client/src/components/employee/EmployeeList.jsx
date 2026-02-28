@@ -12,7 +12,7 @@ const EmployeeList = ({ highlightId }) => {
 
   const loadEmployees = async () => {
     try {
-      const { data } = await api.get("/employees");
+      const { data } = await api.get("employees");
       setEmployees(data);
     } catch (err) {
       console.error("Failed to load employees:", err.response?.data || err.message);

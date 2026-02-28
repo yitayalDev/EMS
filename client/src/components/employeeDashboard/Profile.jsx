@@ -31,7 +31,7 @@ const Profile = () => {
         return;
       }
       try {
-        const { data } = await api.get('/employees');
+        const { data } = await api.get('employees');
         const emp = data.find((e) => e._id === user.employeeId);
         setEmployee(emp || null);
       } catch {

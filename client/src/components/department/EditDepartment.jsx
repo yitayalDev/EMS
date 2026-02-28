@@ -9,7 +9,7 @@ const EditDepartment = () => {
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await api.get('/departments');
+      const { data } = await api.get('departments');
       const dept = data.find((d) => d._id === id);
       if (dept) setName(dept.name);
     };
@@ -18,7 +18,7 @@ const EditDepartment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await api.put(`/departments/${id}`, { name });
+    await api.put(`departments/${id}`, { name });
     navigate('/admin/departments');
   };
 

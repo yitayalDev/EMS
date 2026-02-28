@@ -9,7 +9,7 @@ const EmployeeHome = () => {
 
   useEffect(() => {
     if (user?.employeeId) {
-      api.get(`/dashboard/employee/${user.employeeId}`)
+      api.get(`dashboard/employee/${user.employeeId}`)
         .then(({ data }) => setStats(data))
         .catch(err => console.error(err));
     }

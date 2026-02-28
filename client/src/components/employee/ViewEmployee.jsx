@@ -9,7 +9,7 @@ const ViewEmployee = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await api.get(`/employees/${id}`);
+        const { data } = await api.get(`employees/${id}`);
         setEmp(data);
       } catch (err) {
         alert(err.response?.data?.message || err.message);
@@ -28,10 +28,10 @@ const ViewEmployee = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-800 p-6">
       <div className="max-w-xl mx-auto bg-black/40 backdrop-blur-2xl rounded-2xl p-6 relative shadow-[0_0_30px_rgba(139,92,246,0.8)]">
-        
+
         {/* Neon Border */}
         <div className="absolute inset-0 rounded-2xl border-2 border-gradient-to-r from-green-400 via-lime-400 to-emerald-500 blur-xl opacity-70 animate-neon-border pointer-events-none"></div>
-        
+
         <h2 className="text-2xl font-bold text-white mb-4 text-center drop-shadow-lg">
           Employee Profile
         </h2>

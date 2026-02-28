@@ -26,7 +26,7 @@ const Salary = () => {
   useEffect(() => {
     const loadSalary = async () => {
       try {
-        const { data } = await api.get('/salary/my');
+        const { data } = await api.get('salary/my');
         setSalary(data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load salary details');

@@ -8,7 +8,7 @@ const LeaveDetails = () => {
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await api.get('/leaves');
+      const { data } = await api.get('leaves');
       const item = data.find((x) => x._id === id);
       setLeave(item || null);
     };

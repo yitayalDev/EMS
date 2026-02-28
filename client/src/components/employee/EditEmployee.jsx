@@ -25,8 +25,8 @@ const EditEmployee = () => {
     const fetchData = async () => {
       try {
         const [depRes, empRes] = await Promise.all([
-          api.get('/departments'),
-          api.get(`/employees/${id}`),
+          api.get('departments'),
+          api.get(`employees/${id}`),
         ]);
 
         setDepartments(depRes.data);
@@ -72,7 +72,7 @@ const EditEmployee = () => {
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       if (image) fd.append('image', image);
 
-      await api.put(`/employees/${id}`, fd, {
+      await api.put(`employees/${id}`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -87,7 +87,7 @@ const EditEmployee = () => {
   const handlePermSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/employees/${id}/permissions`, permForm);
+      await api.put(`employees/${id}/permissions`, permForm);
       alert('Role and permissions updated successfully!');
     } catch (err) {
       console.error('Update Permission Error:', err);

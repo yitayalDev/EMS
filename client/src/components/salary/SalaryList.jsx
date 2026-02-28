@@ -8,7 +8,7 @@ const SalaryList = () => {
   const [items, setItems] = useState([]);
 
   const load = async () => {
-    const { data } = await api.get('/salary');
+    const { data } = await api.get('salary');
     setItems(data);
   };
 

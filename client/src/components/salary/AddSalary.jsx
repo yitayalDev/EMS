@@ -19,8 +19,8 @@ const AddSalary = () => {
     const load = async () => {
       try {
         const [empRes, depRes] = await Promise.all([
-          api.get('/employees'),
-          api.get('/departments'),
+          api.get('employees'),
+          api.get('departments'),
         ]);
         setEmployees(empRes.data);
         setDepartments(depRes.data);
@@ -52,7 +52,7 @@ const AddSalary = () => {
         payDate: form.payDate ? new Date(form.payDate).toISOString() : undefined,
       };
 
-      const res = await api.post('/salary', payload);
+      const res = await api.post('salary', payload);
       console.log('Salary added:', res.data);
       alert('Salary added successfully!');
       navigate('/admin/salary');

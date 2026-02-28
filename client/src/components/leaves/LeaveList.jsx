@@ -20,7 +20,7 @@ const LeaveList = () => {
   // ----------------------------
   const load = async () => {
     try {
-      const { data } = await api.get('/leaves');
+      const { data } = await api.get('leaves');
       setLeaves(data);
     } catch (err) {
       console.error(err);
@@ -148,9 +148,8 @@ const LeaveList = () => {
             {leaves.map((l, i) => (
               <tr
                 key={l._id}
-                className={`border-t transition-all duration-300 ease-in-out ${
-                  deletingIds.includes(l._id) ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'
-                }`}
+                className={`border-t transition-all duration-300 ease-in-out ${deletingIds.includes(l._id) ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'
+                  }`}
               >
                 <td className="px-4 py-2">{i + 1}</td>
                 <td className="px-4 py-2">{l.employee?.name}</td>

@@ -22,7 +22,7 @@ const DepartmentList = () => {
         return;
       }
 
-      const { data } = await api.get('/departments', {
+      const { data } = await api.get('departments', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -54,7 +54,7 @@ const DepartmentList = () => {
         return;
       }
 
-      await api.delete(`/departments/${id}`, {
+      await api.delete(`departments/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

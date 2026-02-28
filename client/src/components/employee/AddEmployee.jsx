@@ -21,7 +21,7 @@ const AddEmployee = () => {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const { data } = await api.get('/departments');
+        const { data } = await api.get('departments');
         setDepartments(data);
       } catch (err) {
         console.error('Failed to fetch departments:', err);
@@ -62,7 +62,7 @@ const AddEmployee = () => {
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       fd.append('image', image);
 
-      await api.post('/auth/create-employee', fd, {
+      await api.post('auth/create-employee', fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
