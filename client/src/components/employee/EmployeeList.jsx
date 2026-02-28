@@ -41,7 +41,7 @@ const EmployeeList = ({ highlightId }) => {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-800 p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white drop-shadow-lg">Employees</h2>
-        {(user?.role === 'admin' || user?.role === 'hr' || user?.permissions?.includes('manage_users')) && (
+        {user?.role === 'admin' && (
           <Link
             to="/admin/employees/add"
             className="group flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-xl
@@ -109,7 +109,7 @@ const EmployeeList = ({ highlightId }) => {
                       >
                         View
                       </Link>
-                      {(user?.role === 'admin' || user?.role === 'hr' || user?.permissions?.includes('manage_users')) && (
+                      {user?.role === 'admin' && (
                         <Link
                           to={`/admin/employees/${emp._id}/edit`}
                           className="text-xs text-pink-400 px-2 py-1 rounded bg-white hover:bg-pink-100 hover:text-pink-600 transition-all duration-200 shadow-sm"
@@ -117,7 +117,7 @@ const EmployeeList = ({ highlightId }) => {
                           Edit
                         </Link>
                       )}
-                      {(user?.role === 'admin' || user?.role === 'it_admin' || user?.permissions?.includes('delete_records')) && (
+                      {user?.role === 'admin' && (
                         <button
                           onClick={() => setConfirmDeleteId(emp._id)}
                           className="text-xs text-red-400 px-2 py-1 rounded bg-white hover:bg-red-100 hover:text-red-600 transition-all duration-200 shadow-sm"

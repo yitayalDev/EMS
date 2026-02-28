@@ -79,7 +79,7 @@ const DepartmentList = () => {
         </h2>
 
         {/* Add Department Button (Green Neon) with White Text */}
-        {(user?.role === 'admin' || user?.role === 'hr') && (
+        {user?.role === 'admin' && (
           <Link
             to="/admin/departments/add"
             className="px-4 py-2 text-sm font-semibold rounded-lg
@@ -125,7 +125,7 @@ const DepartmentList = () => {
                       <td className="px-3 py-2">{i + 1}</td>
                       <td className="px-3 py-2">{d.name}</td>
                       <td className="px-3 py-2 space-x-2">
-                        {(user?.role === 'admin' || user?.role === 'hr') && (
+                        {user?.role === 'admin' && (
                           <Link
                             to={`/admin/departments/${d._id}/edit`}
                             className="text-xs text-amber-700 bg-white px-2 py-1 rounded
@@ -137,7 +137,7 @@ const DepartmentList = () => {
                           </Link>
                         )}
 
-                        {(user?.role === 'admin' || user?.role === 'hr' || user?.permissions?.includes('delete_records')) && (
+                        {user?.role === 'admin' && (
                           <button
                             onClick={() => handleDelete(d._id)}
                             className="text-xs text-red-500 bg-white px-2 py-1 rounded

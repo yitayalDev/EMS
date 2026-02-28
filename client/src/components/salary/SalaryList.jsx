@@ -28,7 +28,7 @@ const SalaryList = () => {
         </h2>
 
         {/* Add Salary Button: neon green pulse with white text */}
-        {(user?.role === 'admin' || user?.role === 'hr' || user?.role === 'finance' || user?.permissions?.includes('manage_salary')) && (
+        {user?.role === 'admin' && (
           <Link
             to="/admin/salary/add"
             className="group px-6 py-3 text-sm font-semibold !text-white rounded-xl

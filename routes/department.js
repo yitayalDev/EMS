@@ -5,14 +5,14 @@ const {
   updateDepartment,
   deleteDepartment
 } = require('../controllers/departmentController');
-const { protect, authorize } = require('../middleware/authMiddleware');
+const { protect, authorize, authorizeOrPermission } = require('../middleware/authMiddleware');
 
-// -------------------- Admin + Employee --------------------
-router.get('/', protect, authorize('admin', 'employee'), getDepartments);
+// -------------------- Admin + Employee + HR + IT --------------------
+router.get('/', protect, authorize('admin', 'employee', 'hr', 'it_admin'), getDepartments);
 
-// -------------------- Admin only --------------------
-router.post('/', protect, authorize('admin'), createDepartment);
-router.put('/:id', protect, authorize('admin'), updateDepartment);
-router.delete('/:id', protect, authorize('admin'), deleteDepartment);
+// -------------------- Admin + HR + IT --------------------
+router.post('/', protect, authorize('admin', 'hr', 'it_admin'), createDepartment);
+router.put('/:id', protect, authorize('admin', 'hr', 'it_admin'), updateDepartment);
+router.delete('/:id', protect, authorizeOrPermission(['admin'], 'delete_records'), deleteDepartment);
 
 module.exports = router;

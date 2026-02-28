@@ -16,11 +16,6 @@ const EditEmployee = () => {
   });
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [permForm, setPermForm] = useState({
-    role: 'employee',
-    permissions: [],
-  });
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,11 +34,6 @@ const EditEmployee = () => {
           departmentId: e.department?._id || '',
           position: e.position || '',
           status: e.status || 'active',
-        });
-
-        setPermForm({
-          role: e.user?.role || 'employee',
-          permissions: e.user?.permissions || [],
         });
 
         setPreview(e.image ? `${API_BASE_URL}${e.image}` : null);
@@ -82,25 +72,6 @@ const EditEmployee = () => {
       console.error(err);
       alert(err.response?.data?.message || 'Server error');
     }
-  };
-
-  const handlePermSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await api.put(`employees/${id}/permissions`, permForm);
-      alert('Role and permissions updated successfully!');
-    } catch (err) {
-      console.error('Update Permission Error Full:', err);
-      alert(`Error ${err.response?.status || 'Unknown'}: ${err.response?.data?.message || err.message}\nURL: ${err.config?.url}`);
-    }
-  };
-
-  const handleCheckboxChange = (e) => {
-    const value = e.target.value;
-    const perms = new Set(permForm.permissions);
-    if (e.target.checked) perms.add(value);
-    else perms.delete(value);
-    setPermForm({ ...permForm, permissions: Array.from(perms) });
   };
 
   return (
@@ -180,54 +151,6 @@ const EditEmployee = () => {
             className="col-span-full bg-green-900/40 border border-green-400/40 px-5 py-2 rounded font-semibold transition hover:bg-green-800/40 text-blue-400 hover:text-blue-300"
           >
             Update Employee Info
-          </button>
-        </form>
-
-        <hr className="my-10 border-green-400/30" />
-
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Manage Role & Permissions</h2>
-        <form onSubmit={handlePermSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-green-200 mb-1">Role</label>
-            <select
-              value={permForm.role}
-              onChange={(e) => setPermForm({ ...permForm, role: e.target.value })}
-              className="w-full bg-green-900/40 border border-green-400/30 px-3 py-2 rounded text-white focus:border-green-400 focus:ring focus:ring-green-400/30 outline-none"
-            >
-              <option value="employee">Employee</option>
-              <option value="hr">HR</option>
-              <option value="finance">Finance</option>
-              <option value="it_admin">IT Admin</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-green-200 mb-2">Custom Permissions</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-white">
-              {[
-                { id: 'view_salary', label: 'View Salary' },
-                { id: 'manage_salary', label: 'Manage Salary' },
-                { id: 'delete_records', label: 'Delete Records' },
-                { id: 'manage_users', label: 'Manage Users' },
-              ].map((p) => (
-                <label key={p.id} className="flex items-center gap-2 cursor-pointer hover:text-green-300">
-                  <input
-                    type="checkbox"
-                    value={p.id}
-                    checked={permForm.permissions.includes(p.id)}
-                    onChange={handleCheckboxChange}
-                    className="rounded border-green-400 text-green-600 focus:ring-green-400 bg-green-900/60"
-                  />
-                  {p.label}
-                </label>
-              ))}
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-indigo-600/60 border border-indigo-400/40 px-5 py-2 rounded font-semibold text-white transition hover:bg-indigo-700/60 shadow-[0_0_15px_rgba(129,140,248,0.4)]"
-          >
-            Update Role & Permissions
           </button>
         </form>
       </div>

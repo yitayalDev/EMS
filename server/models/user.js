@@ -5,12 +5,11 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String,
-  role: { 
-    type: String, 
-    enum: ['admin', 'employee', 'hr', 'finance', 'it_admin'], 
-    default: 'employee' 
+  role: {
+    type: String,
+    enum: ['admin', 'employee'],
+    default: 'employee'
   },
-  permissions: { type: [String], default: [] },
   employee: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
 
   // 🔹 Added ONLY for reset password

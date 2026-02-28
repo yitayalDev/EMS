@@ -28,9 +28,6 @@ const AdminSidebar = () => {
   }, []);
 
   const isAdmin = user?.role === 'admin';
-  const isHR = user?.role === 'hr';
-  const isFinance = user?.role === 'finance';
-  const isIT = user?.role === 'it_admin';
 
   return (
     <aside
@@ -39,32 +36,32 @@ const AdminSidebar = () => {
       {/* Glassy sidebar content */}
       <div className="relative z-10 bg-black/40 backdrop-blur-md border border-white/20 h-full flex flex-col">
         <div className="p-4 border-b border-white/20">
-          <h2 className="font-bold text-lg text-white">EMS {user?.role?.toUpperCase()}</h2>
+          <h2 className="font-bold text-lg text-white">EMS Admin</h2>
         </div>
         <nav className="p-4 space-y-1 flex-1">
           <NavLink to="/admin" end className={linkClass}>
             Dashboard
           </NavLink>
 
-          {(isAdmin || isHR || isIT) && (
+          {isAdmin && (
             <NavLink to="/admin/employees" className={linkClass}>
               Employees
             </NavLink>
           )}
 
-          {(isAdmin || isHR || isIT) && (
+          {isAdmin && (
             <NavLink to="/admin/departments" className={linkClass}>
               Departments
             </NavLink>
           )}
 
-          {(isAdmin || isHR) && (
+          {isAdmin && (
             <NavLink to="/admin/leaves" className={linkClass}>
               Leaves
             </NavLink>
           )}
 
-          {(isAdmin || isHR || isFinance || user?.permissions?.includes('view_salary') || user?.permissions?.includes('manage_salary')) && (
+          {isAdmin && (
             <NavLink to="/admin/salary" className={linkClass}>
               Salary
             </NavLink>
