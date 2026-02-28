@@ -55,6 +55,14 @@ app.get("/api/health", (req, res) => {
     res.send("API is running...");
 });
 
+// Diagnostic Route: List files in dist
+app.get("/api/debug-dist", (req, res) => {
+    const distPath = path.join(__dirname, 'dist');
+    if (!fs.existsSync(distPath)) return res.json({ exists: false, path: distPath });
+    const files = fs.readdirSync(distPath, { recursive: true });
+    res.json({ exists: true, path: distPath, files });
+});
+
 // SPA Fallback: Serve index.html for any other GET requests (for React Router)
 app.get('*', (req, res) => {
     // If it's an API request that reached here, it's a 404

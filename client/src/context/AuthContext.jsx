@@ -4,17 +4,29 @@ import { createContext, useContext, useState } from 'react';
 const AuthContext = createContext({
   user: null,
   token: null,
-  login: () => {},
-  logout: () => {},
+  login: () => { },
+  logout: () => { },
 });
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(
-    () => JSON.parse(localStorage.getItem('ems_user') || 'null')
-  );
-  const [token, setToken] = useState(
-    () => localStorage.getItem('ems_token') || null
-  );
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ems_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (err) {
+      console.error('Auth User Init Error:', err);
+      return null;
+    }
+  });
+
+  const [token, setToken] = useState(() => {
+    try {
+      return localStorage.getItem('ems_token') || null;
+    } catch (err) {
+      console.error('Auth Token Init Error:', err);
+      return null;
+    }
+  });
 
   const login = (userData, tokenValue) => {
     setUser(userData);
