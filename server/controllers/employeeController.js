@@ -63,12 +63,19 @@ const getEmployees = async (req, res) => {
 
 const getEmployee = async (req, res) => {
     try {
-        const employee = await Employee.findById(req.params.id).populate('department').populate('user');
-        if (!employee) return res.status(404).json({ message: 'Employee not found' });
-        res.json(employee);
+        const { id } = req.params;
+        // 🔹 Guard against route shadowing
+        if (id === 'ping' || id === 'permissions') return;
+
+        const employee = await Employee.findById(id)
+            .populate('department', 'name')
+            .populate('user', 'email role permissions');
+
+        if (!employee) return res.status(404).json({ message: 'Employee not found', v: '1.4' });
+        res.status(200).json(employee);
     } catch (err) {
-        console.error('Error fetching employee:', err);
-        res.status(500).json({ message: 'Server error', error: err.message });
+        console.error('getEmployee error:', err);
+        res.status(500).json({ message: 'Server error', error: err.message, v: '1.4' });
     }
 };
 

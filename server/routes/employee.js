@@ -10,11 +10,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+router.get('/ping', (req, res) => res.json({ message: 'Employee Route Active (Subfolder)', version: '1.3' }));
+router.put('/:id/permissions', protect, authorize('admin'), controller.updatePermissions);
+
 router.post('/', protect, authorizeOrPermission(['admin', 'hr'], 'manage_users'), upload.single('image'), controller.createEmployee);
 router.get('/', protect, authorize('admin', 'hr', 'it_admin'), controller.getEmployees);
 router.get('/:id', protect, authorize('admin', 'hr', 'it_admin', 'employee'), controller.getEmployee);
 router.put('/:id', protect, authorizeOrPermission(['admin', 'hr'], 'manage_users'), upload.single('image'), controller.updateEmployee);
-router.put('/:id/permissions', protect, authorize('admin'), controller.updatePermissions);
 router.delete('/:id', protect, authorizeOrPermission(['admin', 'it_admin'], 'delete_records'), controller.deleteEmployee);
 
 module.exports = router;
