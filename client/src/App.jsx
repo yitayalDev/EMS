@@ -17,7 +17,7 @@ const App = () => (
       <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* ✅ added */}
 
       <Route element={<PrivateRoute />}>
-        <Route element={<RoleBasedRoute allowedRoles={["admin", "hr", "finance", "it_admin"]} />}>
+        <Route element={<RoleBasedRoute allowedRoles={["admin"]} />}>
           <Route path="/admin/*" element={<AdminDashboard />} />
         </Route>
 

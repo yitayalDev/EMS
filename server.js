@@ -24,17 +24,16 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Ensure upload folder exists
+// Serve Static Files (Frontend Build)
+const distPath = path.join(__dirname, 'dist');
+
+// Use static middleware first for all files in dist
+app.use(express.static(distPath));
+
+// Ensure upload folder is also served
 const uploadDir = path.join(__dirname, 'public', 'upload');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 app.use('/upload', express.static(uploadDir));
-
-// Serve Static Files (Frontend Build)
-const distPath = path.join(__dirname, 'dist');
-if (fs.existsSync(distPath)) {
-    console.log('Serving static files from:', distPath);
-    app.use(express.static(distPath));
-}
 
 // Request Logger
 app.use((req, res, next) => {
@@ -57,24 +56,20 @@ app.get("/api/health", (req, res) => {
 });
 
 // SPA Fallback: Serve index.html for any other GET requests (for React Router)
-if (fs.existsSync(distPath)) {
-    app.get('*', (req, res) => {
-        if (!req.path.startsWith('/api/')) {
-            res.sendFile(path.join(distPath, 'index.html'));
-        } else {
-            res.status(404).json({ message: `API route ${req.method} ${req.url} not found.` });
-        }
-    });
-} else {
-    // Catch-all for API 404s if dist is not present
-    app.use((req, res) => {
-        if (req.path.startsWith('/api/')) {
-            res.status(404).json({ message: `API route ${req.method} ${req.url} not found.` });
-        } else {
-            res.status(404).send("Frontend build not found. Please run build command.");
-        }
-    });
-}
+app.get('*', (req, res) => {
+    // If it's an API request that reached here, it's a 404
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ message: `API route ${req.method} ${req.url} not found.` });
+    }
+
+    // Otherwise, try to serve the index.html
+    const indexPath = path.join(distPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        res.status(404).send("Frontend build not found. Please ensure the 'dist' folder exists and contains index.html.");
+    }
+});
 
 // Server
 const PORT = process.env.PORT || 5000;
