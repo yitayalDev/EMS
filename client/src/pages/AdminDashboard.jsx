@@ -3,6 +3,7 @@ import { Routes, Route, useParams, useNavigate } from "react-router-dom";
 import AdminSidebar from "../components/dashboard/AdminSidebar.jsx";
 import Navbar from "../components/dashboard/Navbar.jsx";
 import AdminSummary from "../components/dashboard/AdminSummary.jsx";
+import Analytics from "../components/dashboard/Analytics.jsx";
 import DepartmentList from "../components/department/DepartmentList.jsx";
 import AddDepartment from "../components/department/AddDepartment.jsx";
 import EditDepartment from "../components/department/EditDepartment.jsx";
@@ -30,6 +31,7 @@ const AdminDashboard = () => {
         <main className="p-4 space-y-4">
           <Routes>
             <Route path="" element={<AdminSummary />} />
+            <Route path="analytics" element={<Analytics />} />
 
             {isAdmin && (
               <>

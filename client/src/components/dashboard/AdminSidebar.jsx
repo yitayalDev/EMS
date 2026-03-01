@@ -44,6 +44,12 @@ const AdminSidebar = () => {
           </NavLink>
 
           {isAdmin && (
+            <NavLink to="/admin/analytics" className={linkClass}>
+              Analytics
+            </NavLink>
+          )}
+
+          {isAdmin && (
             <NavLink to="/admin/employees" className={linkClass}>
               Employees
             </NavLink>
