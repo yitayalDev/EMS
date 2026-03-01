@@ -1,0 +1,12 @@
+{
+    "name": "ems-root",
+    "version": "1.0.0",
+    "description": "Root package to build the client for Render deployment",
+    "private": true,
+    "scripts": {
+        "install-client": "cd client && npm install",
+        "build-client": "cd client && npm run build",
+        "move-dist": "rm -rf dist && mv client/dist dist",
+        "build": "npm run install-client && npm run build-client && npm run move-dist"
+    }
+}
