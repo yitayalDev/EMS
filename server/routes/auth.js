@@ -9,7 +9,7 @@ const {
 } = require('../controllers/authController');
 
 const { protect, authorize } = require('../middleware/authMiddleware');
-const upload = require('../middlewares/upload');
+const upload = require('../middleware/upload');
 
 // Auth routes
 router.post('/login', login);
