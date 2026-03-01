@@ -14,8 +14,8 @@ const RegisterCompany = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate();
-    const { login } = useAuth(); // We'll log them in directly using the returned token
+    // const navigate = useNavigate();
+    // const { login } = useAuth(); 
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

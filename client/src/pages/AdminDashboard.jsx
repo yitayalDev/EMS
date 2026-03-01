@@ -17,6 +17,7 @@ import AddSalary from "../components/salary/AddSalary.jsx";
 import Setting from "../components/employeeDashboard/Setting.jsx";
 import AttendanceList from "../components/dashboard/AttendanceList.jsx";
 import BillingDashboard from "../components/dashboard/BillingDashboard.jsx";
+import CompanySettings from "../components/dashboard/CompanySettings.jsx";
 import { useState, useEffect } from "react";
 import api from "../utils/api";
 
@@ -33,7 +34,7 @@ const AdminDashboard = () => {
   const canViewAttendance = hasRole(['admin', 'hr']);
 
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <AdminSidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
@@ -79,6 +80,11 @@ const AdminDashboard = () => {
 
             {(hasRole(['admin', 'finance'])) && (
               <Route path="billing" element={<BillingDashboard />} />
+            )}
+
+
+            {(user?.role === 'admin') && (
+              <Route path="company-settings" element={<CompanySettings />} />
             )}
 
             <Route path="settings" element={<Setting />} />
@@ -148,24 +154,24 @@ const EditEmployeeInline = () => {
   };
 
   return (
-    <div className="max-w-xl bg-white rounded shadow p-4">
-      <h2 className="text-lg font-semibold mb-3 text-gray-800">Edit Employee</h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-        <input name="name" placeholder="Name" className="border rounded px-3 py-2" value={form.name} onChange={handleChange} />
-        <input type="date" name="dob" className="border rounded px-3 py-2" value={form.dob} onChange={handleChange} />
-        <select name="departmentId" className="border rounded px-3 py-2" value={form.departmentId} onChange={handleChange}>
+    <div className="max-w-xl bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 transition-colors">
+      <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">Edit Employee</h2>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-900 dark:text-gray-100">
+        <input name="name" placeholder="Name" className="border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" value={form.name} onChange={handleChange} />
+        <input type="date" name="dob" className="border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" value={form.dob} onChange={handleChange} />
+        <select name="departmentId" className="border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" value={form.departmentId} onChange={handleChange}>
           <option value="">Select department</option>
           {departments.map((d) => (
             <option key={d._id} value={d._id}>{d.name}</option>
           ))}
         </select>
-        <input name="position" placeholder="Position" className="border rounded px-3 py-2" value={form.position} onChange={handleChange} />
-        <input type="date" name="joinDate" className="border rounded px-3 py-2" value={form.joinDate} onChange={handleChange} />
-        <select name="status" className="border rounded px-3 py-2" value={form.status} onChange={handleChange}>
+        <input name="position" placeholder="Position" className="border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" value={form.position} onChange={handleChange} />
+        <input type="date" name="joinDate" className="border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" value={form.joinDate} onChange={handleChange} />
+        <select name="status" className="border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" value={form.status} onChange={handleChange}>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>
-        <input type="file" accept="image/*" className="col-span-full border rounded px-3 py-2" onChange={(e) => setImage(e.target.files[0])} />
+        <input type="file" accept="image/*" className="col-span-full border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2.5 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-indigo-100 dark:file:bg-indigo-900 file:text-indigo-700 dark:file:text-indigo-200" onChange={(e) => setImage(e.target.files[0])} />
         <div className="col-span-full pt-2">
           <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">Update Info</button>
         </div>

@@ -70,11 +70,11 @@ const DepartmentList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-800 p-6">
+    <div className="p-6">
 
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-white drop-shadow-md">
+        <h2 className="text-xl font-bold text-gray-800 dark:text-white drop-shadow-md">
           Departments
         </h2>
 
@@ -96,19 +96,16 @@ const DepartmentList = () => {
         )}
       </div>
 
-      {/* Neon Glassmorphic Table Card */}
-      <div className="relative rounded-2xl overflow-hidden p-1">
-        {/* Animated Neon Border */}
-        <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-lime-400 to-emerald-500 blur-xl opacity-70 animate-neon-border rounded-2xl"></div>
-
-        <div className="relative bg-white/10 backdrop-blur-md rounded-2xl shadow-lg overflow-x-auto hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+      {/* Premium Table Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-200">
+        <div className="overflow-x-auto hover:shadow-xl transition-all duration-300">
           {loading ? (
-            <p className="p-3 text-green-300">Loading departments...</p>
+            <p className="p-3 text-gray-500 dark:text-gray-400 text-center">Loading departments...</p>
           ) : error ? (
-            <p className="p-3 text-red-400">{error}</p>
+            <p className="p-3 text-red-500 dark:text-red-400 text-center">{error}</p>
           ) : (
-            <table className="min-w-full text-sm text-white">
-              <thead className="bg-gradient-to-r from-purple-800 via-indigo-800 to-blue-800/70 border-b border-purple-500">
+            <table className="min-w-full text-sm text-gray-700 dark:text-gray-200">
+              <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                 <tr>
                   <th className="px-3 py-2 text-left">No.</th>
                   <th className="px-3 py-2 text-left">Name</th>
@@ -120,7 +117,7 @@ const DepartmentList = () => {
                   departments.map((d, i) => (
                     <tr
                       key={d._id}
-                      className="border-t border-purple-600 hover:bg-purple-700/30 hover:shadow-[0_0_15px_#22c55e] transition-all duration-200"
+                      className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
                     >
                       <td className="px-3 py-2">{i + 1}</td>
                       <td className="px-3 py-2">{d.name}</td>
@@ -128,10 +125,7 @@ const DepartmentList = () => {
                         {user?.role === 'admin' && (
                           <Link
                             to={`/admin/departments/${d._id}/edit`}
-                            className="text-xs text-amber-700 bg-white px-2 py-1 rounded
-                                       hover:text-white hover:shadow-[0_0_8px_#ffbf00]
-                                       transition-all duration-200
-                                       animate-neon-pulse"
+                            className="text-xs text-amber-600 dark:text-amber-400 px-3 py-1.5 rounded-md bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors shadow-sm"
                           >
                             Edit
                           </Link>
@@ -140,10 +134,7 @@ const DepartmentList = () => {
                         {user?.role === 'admin' && (
                           <button
                             onClick={() => handleDelete(d._id)}
-                            className="text-xs text-red-500 bg-white px-2 py-1 rounded
-                                       hover:text-white hover:shadow-[0_0_8px_#f87171]
-                                       transition-all duration-200
-                                       animate-neon-pulse"
+                            className="text-xs text-red-600 dark:text-red-400 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors shadow-sm"
                           >
                             Delete
                           </button>
@@ -155,7 +146,7 @@ const DepartmentList = () => {
                   <tr>
                     <td
                       colSpan={3}
-                      className="px-3 py-3 text-center text-green-300"
+                      className="px-3 py-4 text-center text-gray-500 dark:text-gray-400"
                     >
                       No departments found.
                     </td>

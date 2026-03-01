@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/user');
 const Employee = require('../models/employee');
+const sendEmail = require('../utils/email');
 
 // JWT token generator
 const generateToken = (id, role) =>
@@ -23,6 +24,16 @@ exports.login = async (req, res) => {
 
     const token = generateToken(user._id, user.role);
 
+    // For employees, we want to return their tenant's branding
+    let branding = { logo: user.companyLogo, name: user.companyName };
+    if (user.role === 'employee' && user.tenantId) {
+      const admin = await User.findById(user.tenantId);
+      if (admin) {
+        branding.logo = admin.companyLogo;
+        branding.name = admin.companyName;
+      }
+    }
+
     res.json({
       token,
       user: {
@@ -32,6 +43,8 @@ exports.login = async (req, res) => {
         role: user.role,
         permissions: user.permissions || [],
         employeeId: user.employee?._id || null,
+        companyLogo: branding.logo,
+        companyName: branding.name,
       },
     });
   } catch (err) {
@@ -99,7 +112,13 @@ exports.createEmployeeAccount = async (req, res) => {
     const exist = await User.findOne({ email });
     if (exist) return res.status(400).json({ message: 'Email already exists' });
 
-    const user = new User({ name, email, password, role: 'employee' });
+    const user = new User({
+      name,
+      email,
+      password,
+      role: 'employee',
+      tenantId: req.user.tenantId
+    });
     await user.save();
 
     let imagePath = '';
@@ -151,11 +170,27 @@ exports.forgotPassword = async (req, res) => {
 
     await user.save();
 
-    // ⚠️ Token returned for testing (later email)
-    res.json({
-      message: 'Reset token generated',
-      token,
-    });
+    // Create reset url
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
+
+    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a POST request to: \n\n ${resetUrl}`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Password reset token',
+        message,
+      });
+
+      res.json({ message: 'Email sent successfully' });
+    } catch (err) {
+      console.error('Email sending failed:', err);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+
+      return res.status(500).json({ message: 'Email could not be sent' });
+    }
   } catch (err) {
     console.error('Forgot password error:', err);
     res.status(500).json({ message: 'Server error' });

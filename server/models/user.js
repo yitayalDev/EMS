@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
   // 🔹 Added ONLY for reset password
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+
+  // 🔹 Custom Branding (for Admins/Tenants)
+  companyLogo: String,
+  companyName: String,
 });
 
 userSchema.pre('save', async function () {

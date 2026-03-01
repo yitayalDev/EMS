@@ -4,10 +4,10 @@
   "description": "Employee Management System Backend",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "npm install --prefix client && npm run build --prefix client && cp -r client/dist dist",
-    "dev": "nodemon server.js",
-    "seed": "node userSeed.js"
+    "start": "node server/server.js",
+    "build": "npm install --prefix client && npm run build --prefix client && rimraf dist && mkdir dist && cp -rv client/dist/* dist/ || xcopy /E /I /Y client\\dist dist",
+    "dev": "nodemon server/server.js",
+    "seed": "node server/userSeed.js"
   },
   "dependencies": {
     "express": "^4.18.2",

@@ -19,11 +19,11 @@ const SalaryList = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-800 p-6">
+    <div className="p-6">
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white drop-shadow-lg">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white drop-shadow-sm">
           Salary
         </h2>
 
@@ -46,15 +46,13 @@ const SalaryList = () => {
         )}
       </div>
 
-      {/* Glassmorphic Table Card */}
-      <div className="relative rounded-2xl overflow-hidden p-1">
-        {/* Neon border */}
-        <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-lime-400 to-emerald-500 blur-xl opacity-70 animate-neon-border rounded-2xl"></div>
+      {/* Premium Table Card */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-200">
 
         {/* Table container */}
-        <div className="relative bg-white/10 backdrop-blur-md rounded-2xl shadow-lg overflow-x-auto hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
-          <table className="min-w-full text-sm text-white">
-            <thead className="bg-gradient-to-r from-purple-800 via-indigo-800 to-blue-800/70 border-b border-purple-500">
+        <div className="overflow-x-auto hover:shadow-xl transition-all duration-300">
+          <table className="min-w-full text-sm text-gray-700 dark:text-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
               <tr>
                 <th className="px-4 py-3 text-left">No.</th>
                 <th className="px-4 py-3 text-left">Employee</th>
@@ -65,17 +63,17 @@ const SalaryList = () => {
             </thead>
             <tbody>
               {items.map((s, i) => (
-                <tr key={s._id} className="border-t border-purple-600 hover:bg-purple-700/30 hover:shadow-[0_0_15px_#22c55e] transition-all duration-200">
+                <tr key={s._id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200">
                   <td className="px-4 py-3">{i + 1}</td>
                   <td className="px-4 py-3">{s.employee?.name}</td>
                   <td className="px-4 py-3">{s.department?.name}</td>
-                  <td className="px-4 py-3">{s.netSalary}</td>
+                  <td className="px-4 py-3 font-medium text-emerald-600 dark:text-emerald-400">${s.netSalary?.toLocaleString()}</td>
                   <td className="px-4 py-3">{new Date(s.payDate).toLocaleDateString()}</td>
                 </tr>
               ))}
               {!items.length && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-center text-green-300">
+                  <td colSpan={5} className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
                     No salary records.
                   </td>
                 </tr>

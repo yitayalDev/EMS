@@ -17,3 +17,31 @@ exports.changePassword = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+exports.getBranding = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('companyLogo companyName');
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.updateBranding = async (req, res) => {
+  try {
+    const { companyName } = req.body;
+    const update = {};
+    if (companyName) update.companyName = companyName;
+    if (req.file) update.companyLogo = `/upload/${req.file.filename}`;
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: update },
+      { new: true }
+    ).select('companyLogo companyName');
+
+    res.json({ message: 'Branding updated successfully', settings: user });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};

@@ -55,8 +55,24 @@ const createEmployee = async (req, res) => {
 
 const getEmployees = async (req, res) => {
     try {
-        const employees = await Employee.find({ tenantId: req.user.tenantId }).populate('department').populate('user');
-        res.json(employees);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const query = { tenantId: req.user.tenantId };
+        const total = await Employee.countDocuments(query);
+        const employees = await Employee.find(query)
+            .populate('department')
+            .populate('user')
+            .skip(skip)
+            .limit(limit);
+
+        res.json({
+            employees,
+            total,
+            page,
+            pages: Math.ceil(total / limit)
+        });
     } catch (err) {
         console.error('Error fetching employees:', err);
         res.status(500).json({ message: 'Server error', error: err.message });

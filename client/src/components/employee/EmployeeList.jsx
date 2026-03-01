@@ -9,11 +9,16 @@ const EmployeeList = ({ highlightId }) => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 10;
 
   const loadEmployees = async () => {
+    setLoading(true);
     try {
-      const { data } = await api.get("employees");
-      setEmployees(data);
+      const { data } = await api.get(`employees?page=${page}&limit=${limit}`);
+      setEmployees(data.employees);
+      setTotalPages(data.pages);
     } catch (err) {
       console.error("Failed to load employees:", err.response?.data || err.message);
     } finally {
@@ -23,12 +28,12 @@ const EmployeeList = ({ highlightId }) => {
 
   useEffect(() => {
     loadEmployees();
-  }, []);
+  }, [page]);
 
   const handleDelete = async (id) => {
     try {
       await api.delete(`/employees/${id}`);
-      setEmployees(employees.filter(emp => emp._id !== id));
+      loadEmployees(); // Reload current page
       setConfirmDeleteId(null);
       alert("Employee deleted successfully");
     } catch (err) {
@@ -38,9 +43,9 @@ const EmployeeList = ({ highlightId }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-800 p-6">
+    <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white drop-shadow-lg">Employees</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white drop-shadow-sm">Employees</h2>
         {user?.role === 'admin' && (
           <Link
             to="/admin/employees/add"
@@ -60,17 +65,15 @@ const EmployeeList = ({ highlightId }) => {
         )}
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden p-1">
-        <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-lime-400 to-emerald-500 blur-xl opacity-70 animate-neon-border rounded-2xl"></div>
-
-        <div className="relative bg-white/10 backdrop-blur-md rounded-2xl shadow-lg overflow-x-auto hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-200">
+        <div className="overflow-x-auto hover:shadow-xl transition-all duration-300">
           {loading ? (
-            <div className="p-6 text-center text-white">Loading employees...</div>
+            <div className="p-6 text-center text-gray-500 dark:text-gray-400">Loading employees...</div>
           ) : employees.length === 0 ? (
-            <div className="p-6 text-center text-green-300">No employees found.</div>
+            <div className="p-6 text-center text-gray-500 dark:text-gray-400">No employees found.</div>
           ) : (
-            <table className="min-w-full text-sm text-white">
-              <thead className="bg-gradient-to-r from-purple-800 via-indigo-800 to-blue-800/70 border-b border-purple-500">
+            <table className="min-w-full text-sm text-gray-700 dark:text-gray-200">
+              <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                 <tr>
                   <th className="px-4 py-3 text-left">No.</th>
                   <th className="px-4 py-3 text-left">Image</th>
@@ -83,8 +86,8 @@ const EmployeeList = ({ highlightId }) => {
                 {employees.map((emp, i) => (
                   <tr
                     key={emp._id}
-                    className={`border-t border-purple-600 hover:bg-purple-700/30 hover:shadow-[0_0_15px_#22c55e] transition-all duration-200
-                                ${highlightId === emp._id ? "animate-pulse bg-purple-700/40" : ""}`}
+                    className={`border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200
+                                ${highlightId === emp._id ? "animate-pulse bg-green-50 dark:bg-green-900/30" : ""}`}
                   >
                     <td className="px-4 py-3">{i + 1}</td>
                     <td className="px-4 py-3">
@@ -92,7 +95,7 @@ const EmployeeList = ({ highlightId }) => {
                         <img
                           src={`${API_BASE_URL.replace(/\/$/, '')}/${emp.image.replace(/^\//, '')}`}
                           alt={emp.name}
-                          className="w-10 h-10 rounded-full object-cover border border-white/50 shadow-md"
+                          className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-600 shadow-sm"
                         />
                       ) : (
                         <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs">
@@ -105,14 +108,14 @@ const EmployeeList = ({ highlightId }) => {
                     <td className="px-4 py-3 space-x-2">
                       <Link
                         to={`/admin/employees/${emp._id}`}
-                        className="text-xs text-yellow-300 px-2 py-1 rounded bg-white hover:bg-yellow-100 hover:text-yellow-600 transition-all duration-200 shadow-sm"
+                        className="text-xs text-indigo-600 dark:text-indigo-400 px-3 py-1.5 rounded-md bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors shadow-sm"
                       >
                         View
                       </Link>
                       {user?.role === 'admin' && (
                         <Link
                           to={`/admin/employees/${emp._id}/edit`}
-                          className="text-xs text-pink-400 px-2 py-1 rounded bg-white hover:bg-pink-100 hover:text-pink-600 transition-all duration-200 shadow-sm"
+                          className="text-xs text-green-600 dark:text-green-400 px-3 py-1.5 rounded-md bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors shadow-sm"
                         >
                           Edit
                         </Link>
@@ -120,7 +123,7 @@ const EmployeeList = ({ highlightId }) => {
                       {user?.role === 'admin' && (
                         <button
                           onClick={() => setConfirmDeleteId(emp._id)}
-                          className="text-xs text-red-400 px-2 py-1 rounded bg-white hover:bg-red-100 hover:text-red-600 transition-all duration-200 shadow-sm"
+                          className="text-xs text-red-600 dark:text-red-400 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors shadow-sm"
                         >
                           Delete
                         </button>
@@ -132,6 +135,31 @@ const EmployeeList = ({ highlightId }) => {
             </table>
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-600">
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Page <span className="font-semibold text-gray-800 dark:text-white">{page}</span> of <span className="font-semibold text-gray-800 dark:text-white">{totalPages}</span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                disabled={page === 1 || loading}
+                onClick={() => setPage(p => p - 1)}
+                className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
+              >
+                Previous
+              </button>
+              <button
+                disabled={page === totalPages || loading}
+                onClick={() => setPage(p => p + 1)}
+                className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {confirmDeleteId && (

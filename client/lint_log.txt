@@ -1,0 +1,56 @@
+﻿
+> client@0.0.0 lint
+> eslint .
+
+
+C:\Projects\EMS\client\src\App.jsx
+  37:5  error  Parsing error: Expected corresponding JSX closing tag for <SidebarProvider>
+
+C:\Projects\EMS\client\src\components\dashboard\AdminSidebar.jsx
+  33:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\components\dashboard\CompanySettings.jsx
+  1:20  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Projects\EMS\client\src\components\dashboard\Navbar.jsx
+  30:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\components\employeeDashboard\Profile.jsx
+  25:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\components\employeeDashboard\Salary.jsx
+  24:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\components\employeeDashboard\Sidebar.jsx
+  30:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\components\employee\EmployeeList.jsx
+  31:6  warning  React Hook useEffect has a missing dependency: 'loadEmployees'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\components\leaves\LeaveList.jsx
+  33:6  warning  React Hook useEffect has a missing dependency: 'load'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\context\AuthContext.jsx
+  62:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Projects\EMS\client\src\context\SidebarContext.jsx
+  5:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Projects\EMS\client\src\context\ThemeContext.jsx
+  5:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Projects\EMS\client\src\pages\ForgotPassword.jsx
+  24:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\pages\Login.jsx
+  27:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\EMS\client\src\pages\RegisterCompany.jsx
+  17:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  18:13  error  'login' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u     no-unused-vars
+
+C:\Projects\EMS\client\src\pages\ResetPassword.jsx
+  27:6  warning  React Hook useEffect has a missing dependency: 'gradients.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Γ£û 17 problems (7 errors, 10 warnings)
+

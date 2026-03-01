@@ -116,12 +116,12 @@ const LeaveList = () => {
   // Render
   // ----------------------------
   return (
-    <div className="p-6 min-h-screen relative bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+    <div className="p-6">
       {/* Toast */}
       {toast && (
         <div
-          className={`fixed top-6 right-6 px-4 py-2 rounded shadow-lg text-white font-medium transform transition-all duration-300
-            ${toast.type === 'success' ? 'bg-emerald-600' : toast.type === 'error' ? 'bg-red-600' : 'bg-blue-600'}
+          className={`fixed top-6 right-6 px-4 py-2 rounded shadow-lg text-white font-medium transform transition-all duration-300 z-50
+            ${toast.type === 'success' ? 'bg-emerald-600' : toast.type === 'error' ? 'bg-red-600' : 'bg-indigo-600'}
             ${toast ? 'translate-x-0 opacity-100' : 'translate-x-6 opacity-0'}`}
         >
           {toast.message}
@@ -129,74 +129,76 @@ const LeaveList = () => {
       )}
 
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold text-blue-900">Leaves</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white drop-shadow-sm">Leaves</h2>
       </div>
 
-      <div className="bg-white/90 rounded-lg shadow-lg overflow-x-auto">
-        <table className="min-w-full text-sm divide-y divide-gray-200">
-          <thead className="bg-blue-100">
-            <tr>
-              <th className="px-4 py-2 text-left font-medium text-blue-800">No.</th>
-              <th className="px-4 py-2 text-left font-medium text-blue-800">Emp</th>
-              <th className="px-4 py-2 text-left font-medium text-blue-800">Type</th>
-              <th className="px-4 py-2 text-left font-medium text-blue-800">Days</th>
-              <th className="px-4 py-2 text-left font-medium text-blue-800">Status</th>
-              <th className="px-4 py-2 text-left font-medium text-blue-800">Action</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white">
-            {leaves.map((l, i) => (
-              <tr
-                key={l._id}
-                className={`border-t transition-all duration-300 ease-in-out ${deletingIds.includes(l._id) ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'
-                  }`}
-              >
-                <td className="px-4 py-2">{i + 1}</td>
-                <td className="px-4 py-2">{l.employee?.name}</td>
-                <td className="px-4 py-2">{l.leaveType}</td>
-                <td className="px-4 py-2">{l.days}</td>
-                <td className="px-4 py-2">{getStatusBadge(l.status)}</td>
-                <td className="px-4 py-2 flex flex-wrap gap-2">
-                  <ActionButton color="bg-sky-100 text-sky-700">
-                    <Link to={`/admin/leaves/${l._id}`}>View</Link>
-                  </ActionButton>
-
-                  {l.status === 'pending' && (
-                    <>
-                      <ActionButton
-                        color="bg-emerald-100 text-emerald-700"
-                        onClick={() => updateStatus(l._id, 'approved')}
-                      >
-                        Approve
-                      </ActionButton>
-                      <ActionButton
-                        color="bg-red-100 text-red-700"
-                        onClick={() => updateStatus(l._id, 'rejected')}
-                      >
-                        Reject
-                      </ActionButton>
-                    </>
-                  )}
-
-                  <ActionButton
-                    color="bg-gray-200 text-gray-800"
-                    onClick={() => deleteLeave(l._id)}
-                  >
-                    Delete
-                  </ActionButton>
-                </td>
-              </tr>
-            ))}
-
-            {!leaves.length && (
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-200">
+        <div className="overflow-x-auto hover:shadow-xl transition-all duration-300">
+          <table className="min-w-full text-sm text-gray-700 dark:text-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
               <tr>
-                <td colSpan={6} className="px-4 py-4 text-center text-gray-500">
-                  No leave requests.
-                </td>
+                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">No.</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">Emp</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">Type</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">Days</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">Status</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-300">Action</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {leaves.map((l, i) => (
+                <tr
+                  key={l._id}
+                  className={`border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-300 ease-in-out ${deletingIds.includes(l._id) ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'
+                    }`}
+                >
+                  <td className="px-4 py-2">{i + 1}</td>
+                  <td className="px-4 py-2">{l.employee?.name}</td>
+                  <td className="px-4 py-2">{l.leaveType}</td>
+                  <td className="px-4 py-2">{l.days}</td>
+                  <td className="px-4 py-2">{getStatusBadge(l.status)}</td>
+                  <td className="px-4 py-2 flex flex-wrap gap-2">
+                    <ActionButton color="bg-sky-100 text-sky-700">
+                      <Link to={`/admin/leaves/${l._id}`}>View</Link>
+                    </ActionButton>
+
+                    {l.status === 'pending' && (
+                      <>
+                        <ActionButton
+                          color="bg-emerald-100 text-emerald-700"
+                          onClick={() => updateStatus(l._id, 'approved')}
+                        >
+                          Approve
+                        </ActionButton>
+                        <ActionButton
+                          color="bg-red-100 text-red-700"
+                          onClick={() => updateStatus(l._id, 'rejected')}
+                        >
+                          Reject
+                        </ActionButton>
+                      </>
+                    )}
+
+                    <ActionButton
+                      color="bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      onClick={() => deleteLeave(l._id)}
+                    >
+                      Delete
+                    </ActionButton>
+                  </td>
+                </tr>
+              ))}
+
+              {!leaves.length && (
+                <tr>
+                  <td colSpan={6} className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                    No leave requests.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

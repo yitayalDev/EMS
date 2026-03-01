@@ -12,7 +12,7 @@ import Timesheet from '../components/employeeDashboard/Timesheet.jsx';
 
 const EmployeeDashboard = () => {
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />

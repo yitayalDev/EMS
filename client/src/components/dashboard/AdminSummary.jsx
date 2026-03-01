@@ -22,7 +22,7 @@ const AdminSummary = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 p-6 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="p-6 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-6 transition-colors duration-200">
       <SummaryCard label="Total Employees" value={stats.totalEmployees} color="teal" />
       <SummaryCard label="Departments" value={stats.totalDepartments} color="purple" />
       <SummaryCard label="Pending Leaves" value={stats.pendingLeaves} color="orange" />

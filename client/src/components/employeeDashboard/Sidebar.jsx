@@ -1,14 +1,17 @@
 import { NavLink } from 'react-router-dom';
+import { useSidebar } from '../../context/SidebarContext';
+import { useAuth } from '../../context/AuthContext';
 import { useState, useEffect } from 'react';
+import { LayoutDashboard, User, Calendar, DollarSign, Clock, FileText, Settings, ShieldCheck } from 'lucide-react';
+
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 
 const linkClass = ({ isActive }) =>
-  `block px-4 py-2 text-sm rounded transition-all duration-300
-   ${isActive
-    ? 'bg-white/40 text-black font-semibold shadow-md'
-    : 'hover:bg-white/30 hover:text-black text-gray-900'
-  }`;
+  `flex items-center gap-3 px-4 py-2 text-sm rounded-xl transition-all duration-300 ${isActive ? 'bg-white/40 text-gray-900 font-bold shadow-md' : 'text-gray-900 hover:bg-white/20'}`;
 
 const Sidebar = () => {
+  const { user } = useAuth();
+  const { isOpen, closeSidebar } = useSidebar();
   const gradients = [
     'from-green-300 via-green-400 to-green-500',
     'from-yellow-300 via-yellow-400 to-yellow-500',
@@ -27,41 +30,70 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <aside
-      className={`w-64 h-screen hidden md:block
-                  bg-gradient-to-b ${gradients[gradientIndex]}
-                  transition-all duration-1000`}
-    >
-      {/* Glass Header */}
-      <div className="p-4 border-b border-white/40 backdrop-blur-xl bg-white/20">
-        <h2 className="font-bold text-lg text-gray-900">Employee</h2>
-      </div>
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
+          onClick={closeSidebar}
+        />
+      )}
 
-      {/* Glass Menu */}
-      <nav className="p-4 space-y-2 backdrop-blur-xl bg-white/20 h-full">
-        <NavLink to="/employee" end className={linkClass}>
-          Dashboard
-        </NavLink>
-        <NavLink to="/employee/profile" className={linkClass}>
-          My Profile
-        </NavLink>
-        <NavLink to="/employee/leaves" className={linkClass}>
-          Leave
-        </NavLink>
-        <NavLink to="/employee/salary" className={linkClass}>
-          Salary
-        </NavLink>
-        <NavLink to="/employee/attendance" className={linkClass}>
-          Attendance
-        </NavLink>
-        <NavLink to="/employee/timesheet" className={linkClass}>
-          Timesheet
-        </NavLink>
-        <NavLink to="/employee/settings" className={linkClass}>
-          Settings
-        </NavLink>
-      </nav>
-    </aside>
+      <aside
+        className={`fixed md:static inset-y-0 left-0 z-50 w-64 h-screen transform transition-transform duration-300 ease-in-out bg-gradient-to-b ${gradients[gradientIndex]} overflow-y-auto shadow-2xl md:shadow-none
+                   ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+      >
+        {/* Glass Header */}
+        <div className="p-4 border-b border-white/40 backdrop-blur-xl bg-white/20 flex items-center gap-3">
+          {user?.companyLogo ? (
+            <img
+              src={`${API_BASE_URL}${user.companyLogo}`}
+              alt="Org Logo"
+              className="w-10 h-10 rounded-lg object-contain bg-white/30 p-1"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-lg bg-white/30 flex items-center justify-center">
+              <ShieldCheck className="text-gray-900" size={24} />
+            </div>
+          )}
+          <h2 className="font-bold text-lg text-gray-900 truncate">
+            {user?.companyName || 'EMS Pro'}
+          </h2>
+        </div>
+
+        {/* Glass Menu */}
+        <nav className="p-4 space-y-2 backdrop-blur-xl bg-white/20 h-full">
+          <NavLink to="/employee" end className={linkClass}>
+            <LayoutDashboard size={18} />
+            <span>Dashboard</span>
+          </NavLink>
+          <NavLink to="/employee/profile" className={linkClass}>
+            <User size={18} />
+            <span>My Profile</span>
+          </NavLink>
+          <NavLink to="/employee/leaves" className={linkClass}>
+            <Calendar size={18} />
+            <span>Leave</span>
+          </NavLink>
+          <NavLink to="/employee/salary" className={linkClass}>
+            <DollarSign size={18} />
+            <span>Salary</span>
+          </NavLink>
+          <NavLink to="/employee/attendance" className={linkClass}>
+            <Clock size={18} />
+            <span>Attendance</span>
+          </NavLink>
+          <NavLink to="/employee/timesheet" className={linkClass}>
+            <FileText size={18} />
+            <span>Timesheet</span>
+          </NavLink>
+          <NavLink to="/employee/settings" className={linkClass}>
+            <Settings size={18} />
+            <span>Settings</span>
+          </NavLink>
+        </nav>
+      </aside>
+    </>
   );
 };
 
