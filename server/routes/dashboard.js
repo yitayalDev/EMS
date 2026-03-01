@@ -4,7 +4,9 @@ const {
   getEmployeeSummary,
   getMonthlySalary,
   getLeaveAnalytics,
-  getDepartmentAnalytics
+  getDepartmentAnalytics,
+  getAttendanceAnalytics,
+  getEmployeeGrowth
 } = require('../controllers/dashboardController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
@@ -15,5 +17,7 @@ router.get('/employee/:employeeId', protect, authorize('employee'), getEmployeeS
 router.get('/analytics/salary', protect, authorize('admin', 'finance'), getMonthlySalary);
 router.get('/analytics/leaves', protect, authorize('admin', 'hr'), getLeaveAnalytics);
 router.get('/analytics/departments', protect, authorize('admin'), getDepartmentAnalytics);
+router.get('/analytics/attendance', protect, authorize('admin'), getAttendanceAnalytics);
+router.get('/analytics/growth', protect, authorize('admin'), getEmployeeGrowth);
 
 module.exports = router;

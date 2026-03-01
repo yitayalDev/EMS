@@ -177,3 +177,83 @@ exports.getDepartmentAnalytics = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+/**
+ * GET /api/dashboard/analytics/attendance
+ * Attendance trends over the last 30 days.
+ */
+exports.getAttendanceAnalytics = async (req, res) => {
+  try {
+    const Attendance = require('../models/attendance');
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const data = await Attendance.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: thirtyDaysAgo },
+          tenantId: req.user.tenantId
+        }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          presentCount: { $sum: { $cond: [{ $eq: ["$status", "present"] }, 1, 0] } },
+          lateCount: { $sum: { $cond: [{ $eq: ["$status", "late"] }, 1, 0] } },
+          absentCount: { $sum: { $cond: [{ $eq: ["$status", "absent"] }, 1, 0] } },
+          avgWorkHours: { $avg: "$workHours" },
+          total: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    const result = data.map(d => ({
+      date: d._id,
+      attendanceRate: Math.round(((d.presentCount + d.lateCount) / d.total) * 100),
+      avgWorkHours: Number(d.avgWorkHours.toFixed(1)),
+      present: d.presentCount,
+      late: d.lateCount,
+      absent: d.absentCount
+    }));
+
+    res.json(result);
+  } catch (err) {
+    console.error('getAttendanceAnalytics:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+/**
+ * GET /api/dashboard/analytics/growth
+ * New hires per month for the last 12 months.
+ */
+exports.getEmployeeGrowth = async (req, res) => {
+  try {
+    const data = await Employee.aggregate([
+      {
+        $match: {
+          joinDate: { $gte: lastNMonthsDate(12) },
+          tenantId: req.user.tenantId
+        }
+      },
+      {
+        $group: {
+          _id: { year: { $year: '$joinDate' }, month: { $month: '$joinDate' } },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { '_id.year': 1, '_id.month': 1 } },
+    ]);
+
+    const result = data.map((d) => ({
+      month: `${MONTHS[d._id.month - 1]} ${d._id.year}`,
+      hires: d.count,
+    }));
+
+    res.json(result);
+  } catch (err) {
+    console.error('getEmployeeGrowth:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
