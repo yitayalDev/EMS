@@ -111,19 +111,23 @@ exports.checkIn = async (req, res) => {
         const status = deriveStatus(now);
         const ip = getClientIp(req);
 
-        status,
-            ipAddress: ip,
+        const record = await Attendance.findOneAndUpdate(
+            { employee: employee._id, date: today },
+            {
+                checkIn: now,
+                status,
+                ipAddress: ip,
                 location: lat != null && lng != null ? { lat, lng } : undefined,
-                    tenantId: req.user.tenantId
-    },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
+                tenantId: req.user.tenantId
+            },
+            { upsert: true, new: true, setDefaultsOnInsert: true }
         );
 
-    res.status(200).json({ message: 'Checked in successfully.', record });
-} catch (err) {
-    console.error('checkIn error:', err);
-    res.status(500).json({ message: 'Server error during check-in.' });
-}
+        res.status(200).json({ message: 'Checked in successfully.', record });
+    } catch (err) {
+        console.error('checkIn error:', err);
+        res.status(500).json({ message: 'Server error during check-in.' });
+    }
 };
 
 /**
