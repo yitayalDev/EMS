@@ -5,6 +5,7 @@ import { SidebarProvider } from "./context/SidebarContext.jsx";
 import PrivateRoute from "./utils/PrivateRoute.jsx";
 import RoleBasedRoute from "./utils/RoleBasedRoute.jsx";
 
+import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx"; // ✅ added
@@ -17,6 +18,7 @@ const App = () => (
     <AuthProvider>
       <SidebarProvider>
         <Routes>
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterCompany />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -32,7 +34,7 @@ const App = () => (
             </Route>
           </Route>
 
-          <Route path="*" element={<Login />} />
+          <Route path="*" element={<Landing />} />
         </Routes>
       </SidebarProvider>
     </AuthProvider>
