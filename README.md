@@ -1,14 +1,16 @@
-# EMS - Employee Management System
+# EMS - Employee Management System (Frontend)
 
-This is a **Full-Stack Web Application** for managing employees.  
+This is the **Frontend Client** for the Employee Management System.
 
-- **Frontend:** React + Vite (`client/`)  
-- **Backend:** Node.js + Express (`server/`)  
-- **Database:** MongoDB Atlas  
+- **Technology:** React + Vite
+- **Styling:** Tailwind CSS
+- **Charts:** Recharts
 
-Both **frontend and backend** can be deployed on **Render**.
+### Deployment
+This project is configured to be deployed as a **Static Site** on Render. 
+
+- **Root Directory:** `./`
+- **Build Command:** `npm install && npm run build`
+- **Publish Directory:** `dist`
 
 ---
-
-
-
