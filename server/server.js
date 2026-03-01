@@ -22,6 +22,11 @@ app.use(cors({
   },
   credentials: true
 }));
+
+// Stripe webhook MUST be parsed as raw body for signature verification
+const { stripeWebhook } = require('./controllers/subscriptionController');
+app.post('/api/subscription/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
+
 app.use(express.json());
 
 // Paths - if this file is in /server/server.js, we need to go up to find dist in root
@@ -55,6 +60,7 @@ app.use('/api/salary', require('./routes/salary'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/attendance', require('./routes/attendance'));
+app.use('/api/subscription', require('./routes/subscription'));
 
 // API Health Check
 app.get("/api/health", (req, res) => {

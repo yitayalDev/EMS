@@ -16,6 +16,7 @@ import SalaryList from "../components/salary/SalaryList.jsx";
 import AddSalary from "../components/salary/AddSalary.jsx";
 import Setting from "../components/employeeDashboard/Setting.jsx";
 import AttendanceList from "../components/dashboard/AttendanceList.jsx";
+import BillingDashboard from "../components/dashboard/BillingDashboard.jsx";
 import { useState, useEffect } from "react";
 import api from "../utils/api";
 
@@ -74,6 +75,10 @@ const AdminDashboard = () => {
 
             {canViewAttendance && (
               <Route path="attendance" element={<AttendanceList />} />
+            )}
+
+            {(hasRole(['admin', 'finance'])) && (
+              <Route path="billing" element={<BillingDashboard />} />
             )}
 
             <Route path="settings" element={<Setting />} />

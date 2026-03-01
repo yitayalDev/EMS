@@ -87,6 +87,12 @@ const AdminSidebar = () => {
             </NavLink>
           )}
 
+          {hasRole(['admin', 'finance']) && (
+            <NavLink to="/admin/billing" className={linkClass}>
+              Billing & Plans
+            </NavLink>
+          )}
+
           <NavLink to="/admin/settings" className={linkClass}>
             Settings
           </NavLink>
