@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api, { API_BASE_URL } from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
+import AssignRoleModal from "./AssignRoleModal.jsx";
 
 const ViewEmployee = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const [emp, setEmp] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -54,13 +58,31 @@ const ViewEmployee = () => {
           <p><strong>Status:</strong> {emp.status}</p>
         </div>
 
+        {/* Manage Roles Button */}
+        {user?.role === 'admin' && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="mt-4 w-full text-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-2 rounded-xl shadow-[0_0_15px_#8b5cf6] hover:from-indigo-600 hover:to-purple-700 transition-all duration-200"
+          >
+            Manage Roles & Permissions
+          </button>
+        )}
+
         {/* Back Button */}
         <Link
           to="/admin/employees"
-          className="mt-6 inline-block w-full text-center bg-gradient-to-r from-green-500 to-green-700 text-white py-2 rounded-xl shadow-[0_0_15px_#22c55e] hover:from-green-600 hover:to-green-800 transition-all duration-200"
+          className="mt-4 inline-block w-full text-center bg-gradient-to-r from-green-500 to-green-700 text-white py-2 rounded-xl shadow-[0_0_15px_#22c55e] hover:from-green-600 hover:to-green-800 transition-all duration-200"
         >
           Back to Employees
         </Link>
+
+        {isModalOpen && (
+          <AssignRoleModal
+            employee={emp}
+            onClose={() => setIsModalOpen(false)}
+            onUpdate={(updatedUser) => setEmp({ ...emp, user: updatedUser })}
+          />
+        )}
       </div>
     </div>
   );

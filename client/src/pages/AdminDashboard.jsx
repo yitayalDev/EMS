@@ -21,7 +21,15 @@ import api from "../utils/api";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
+  const hasRole = (roles) => user && roles.includes(user.role);
+  const hasPermission = (perm) => user?.permissions?.includes(perm) || user?.role === 'admin';
+
+  const canViewAnalytics = hasRole(['admin', 'hr', 'finance']);
+  const canViewEmployees = hasRole(['admin', 'hr', 'it_admin']) || hasPermission('manage_users');
+  const canViewDepartments = hasRole(['admin', 'hr', 'it_admin']);
+  const canViewLeaves = hasRole(['admin', 'hr']) || hasPermission('manage_leaves');
+  const canViewSalary = hasRole(['admin', 'finance']) || hasPermission('view_salary') || hasPermission('manage_salary');
+  const canViewAttendance = hasRole(['admin', 'hr']);
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -31,9 +39,9 @@ const AdminDashboard = () => {
         <main className="p-4 space-y-4">
           <Routes>
             <Route path="" element={<AdminSummary />} />
-            <Route path="analytics" element={<Analytics />} />
+            {canViewAnalytics && <Route path="analytics" element={<Analytics />} />}
 
-            {isAdmin && (
+            {canViewDepartments && (
               <>
                 <Route path="departments" element={<DepartmentList />} />
                 <Route path="departments/add" element={<AddDepartment />} />
@@ -41,7 +49,7 @@ const AdminDashboard = () => {
               </>
             )}
 
-            {isAdmin && (
+            {canViewEmployees && (
               <>
                 <Route path="employees" element={<EmployeeList />} />
                 <Route path="employees/add" element={<AddEmployee />} />
@@ -50,21 +58,21 @@ const AdminDashboard = () => {
               </>
             )}
 
-            {isAdmin && (
+            {canViewLeaves && (
               <>
                 <Route path="leaves" element={<LeaveList />} />
                 <Route path="leaves/:id" element={<LeaveDetails />} />
               </>
             )}
 
-            {isAdmin && (
+            {canViewSalary && (
               <>
                 <Route path="salary" element={<SalaryList />} />
                 <Route path="salary/add" element={<AddSalary />} />
               </>
             )}
 
-            {isAdmin && (
+            {canViewAttendance && (
               <Route path="attendance" element={<AttendanceList />} />
             )}
 

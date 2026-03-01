@@ -27,7 +27,15 @@ const AdminSidebar = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const isAdmin = user?.role === 'admin';
+  const hasRole = (roles) => user && roles.includes(user.role);
+  const hasPermission = (perm) => user?.permissions?.includes(perm) || user?.role === 'admin';
+
+  const canViewAnalytics = hasRole(['admin', 'hr', 'finance']);
+  const canViewEmployees = hasRole(['admin', 'hr', 'it_admin']) || hasPermission('manage_users');
+  const canViewDepartments = hasRole(['admin', 'hr', 'it_admin']);
+  const canViewLeaves = hasRole(['admin', 'hr']) || hasPermission('manage_leaves');
+  const canViewSalary = hasRole(['admin', 'finance']) || hasPermission('view_salary') || hasPermission('manage_salary');
+  const canViewAttendance = hasRole(['admin', 'hr']);
 
   return (
     <aside
@@ -43,37 +51,37 @@ const AdminSidebar = () => {
             Dashboard
           </NavLink>
 
-          {isAdmin && (
+          {canViewAnalytics && (
             <NavLink to="/admin/analytics" className={linkClass}>
               Analytics
             </NavLink>
           )}
 
-          {isAdmin && (
+          {canViewEmployees && (
             <NavLink to="/admin/employees" className={linkClass}>
               Employees
             </NavLink>
           )}
 
-          {isAdmin && (
+          {canViewDepartments && (
             <NavLink to="/admin/departments" className={linkClass}>
               Departments
             </NavLink>
           )}
 
-          {isAdmin && (
+          {canViewLeaves && (
             <NavLink to="/admin/leaves" className={linkClass}>
               Leaves
             </NavLink>
           )}
 
-          {isAdmin && (
+          {canViewSalary && (
             <NavLink to="/admin/salary" className={linkClass}>
               Salary
             </NavLink>
           )}
 
-          {isAdmin && (
+          {canViewAttendance && (
             <NavLink to="/admin/attendance" className={linkClass}>
               Attendance
             </NavLink>

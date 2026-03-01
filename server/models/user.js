@@ -7,9 +7,10 @@ const userSchema = new mongoose.Schema({
   password: String,
   role: {
     type: String,
-    enum: ['admin', 'employee'],
+    enum: ['admin', 'employee', 'hr', 'finance', 'it_admin'],
     default: 'employee'
   },
+  permissions: [{ type: String }],
   employee: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
 
   // 🔹 Added ONLY for reset password
