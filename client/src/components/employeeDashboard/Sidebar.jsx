@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 const linkClass = ({ isActive }) =>
   `block px-4 py-2 text-sm rounded transition-all duration-300
    ${isActive
-     ? 'bg-white/40 text-black font-semibold shadow-md'
-     : 'hover:bg-white/30 hover:text-black text-gray-900'
-   }`;
+    ? 'bg-white/40 text-black font-semibold shadow-md'
+    : 'hover:bg-white/30 hover:text-black text-gray-900'
+  }`;
 
 const Sidebar = () => {
   const gradients = [
@@ -50,6 +50,12 @@ const Sidebar = () => {
         </NavLink>
         <NavLink to="/employee/salary" className={linkClass}>
           Salary
+        </NavLink>
+        <NavLink to="/employee/attendance" className={linkClass}>
+          Attendance
+        </NavLink>
+        <NavLink to="/employee/timesheet" className={linkClass}>
+          Timesheet
         </NavLink>
         <NavLink to="/employee/settings" className={linkClass}>
           Settings

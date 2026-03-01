@@ -54,6 +54,7 @@ app.use('/api/leaves', require('./routes/leaves'));
 app.use('/api/salary', require('./routes/salary'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/dashboard', require('./routes/dashboard'));
+app.use('/api/attendance', require('./routes/attendance'));
 
 // API Health Check
 app.get("/api/health", (req, res) => {

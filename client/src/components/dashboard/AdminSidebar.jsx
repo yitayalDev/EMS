@@ -67,6 +67,12 @@ const AdminSidebar = () => {
             </NavLink>
           )}
 
+          {isAdmin && (
+            <NavLink to="/admin/attendance" className={linkClass}>
+              Attendance
+            </NavLink>
+          )}
+
           <NavLink to="/admin/settings" className={linkClass}>
             Settings
           </NavLink>

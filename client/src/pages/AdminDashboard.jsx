@@ -14,6 +14,7 @@ import LeaveDetails from "../components/leaves/LeaveDetails.jsx";
 import SalaryList from "../components/salary/SalaryList.jsx";
 import AddSalary from "../components/salary/AddSalary.jsx";
 import Setting from "../components/employeeDashboard/Setting.jsx";
+import AttendanceList from "../components/dashboard/AttendanceList.jsx";
 import { useState, useEffect } from "react";
 import api from "../utils/api";
 
@@ -59,6 +60,10 @@ const AdminDashboard = () => {
                 <Route path="salary" element={<SalaryList />} />
                 <Route path="salary/add" element={<AddSalary />} />
               </>
+            )}
+
+            {isAdmin && (
+              <Route path="attendance" element={<AttendanceList />} />
             )}
 
             <Route path="settings" element={<Setting />} />

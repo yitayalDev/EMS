@@ -7,6 +7,8 @@ import Profile from '../components/employeeDashboard/Profile.jsx';
 import LeavePage from '../components/employeeDashboard/LeavePage.jsx';
 import Salary from '../components/employeeDashboard/Salary.jsx';
 import Setting from '../components/employeeDashboard/Setting.jsx';
+import Attendance from '../components/employeeDashboard/Attendance.jsx';
+import Timesheet from '../components/employeeDashboard/Timesheet.jsx';
 
 const EmployeeDashboard = () => {
   return (
@@ -20,6 +22,8 @@ const EmployeeDashboard = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="leaves" element={<LeavePage />} />
             <Route path="salary" element={<Salary />} /> {/* Salary page route */}
+            <Route path="attendance" element={<Attendance />} />
+            <Route path="timesheet" element={<Timesheet />} />
             <Route path="settings" element={<Setting />} />
           </Routes>
         </main>
