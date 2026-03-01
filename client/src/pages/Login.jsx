@@ -94,9 +94,8 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-3 rounded text-blue-400 bg-blue-500 shadow-lg border border-blue-300 transition-all duration-300 hover:bg-blue-600 animate-pulse-button ${
-              isLoading ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
+            className={`w-full py-3 rounded text-blue-400 bg-blue-500 shadow-lg border border-blue-300 transition-all duration-300 hover:bg-blue-600 animate-pulse-button ${isLoading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
@@ -113,6 +112,20 @@ const Login = () => {
             >
               Forgot password?
             </button>
+          </div>
+
+          {/* SIGN UP LINK */}
+          <div className="text-center pt-4 border-t border-white/10 mt-6">
+            <p className="text-sm text-gray-300">
+              Is your company new here?{' '}
+              <button
+                type="button"
+                onClick={() => navigate('/register')}
+                className="font-bold text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                Register your Organization
+              </button>
+            </p>
           </div>
         </form>
       </div>

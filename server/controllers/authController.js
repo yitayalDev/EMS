@@ -40,6 +40,53 @@ exports.login = async (req, res) => {
   }
 };
 
+// ---------------- REGISTER ADMIN (Org Signup) ----------------
+exports.registerAdmin = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const exist = await User.findOne({ email });
+    if (exist) return res.status(400).json({ message: 'Email already exists' });
+
+    // Ensure the new user is an admin without a parent tenantId (they are the root)
+    const user = new User({
+      name,
+      email,
+      password,
+      role: 'admin',
+      permissions: ['manage_users', 'manage_salary', 'manage_leaves', 'manage_departments'] // Give them all permissions by default
+    });
+
+    // Explicitly set tenantId to their own ID after creation, or simply let authMiddleware handle it
+    // But setting it explicitly is cleaner for DB consistency
+    await user.save();
+    user.tenantId = user._id;
+    await user.save();
+
+    const token = generateToken(user._id, user.role);
+
+    res.status(201).json({
+      message: 'Organization created successfully',
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        permissions: user.permissions
+      },
+    });
+
+  } catch (err) {
+    console.error('Register Admin error:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
 // ---------------- CREATE EMPLOYEE (admin only) ----------------
 exports.createEmployeeAccount = async (req, res) => {
   try {

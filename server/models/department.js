@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const departmentSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, unique: true }
+    tenantId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    name: { type: String, required: true } // Removed global unique constraint to allow same department names across companies
   },
   { timestamps: true }
 );

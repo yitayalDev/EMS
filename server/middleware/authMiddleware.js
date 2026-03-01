@@ -26,6 +26,15 @@ exports.protect = async (req, res, next) => {
             return res.status(401).json({ message: 'User not found' });
         }
 
+        // Inject Tenant Isolation ID
+        if (user.role === 'admin') {
+            user.tenantId = user._id; // The Admin is the root of the tenant
+        } else if (!user.tenantId) {
+            // Fallback for legacy employees before multi-tenancy was added
+            // We'll need a migration script, but for now we'll log it
+            console.warn(`User ${user.email} missing tenantId`);
+        }
+
         // 🔥 THIS FIX MAKES LEAVE WORK
         if (user.role === 'employee' && user.employee) {
             user.employeeId = user.employee._id;

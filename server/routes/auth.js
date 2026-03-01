@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {
   login,
+  registerAdmin,
   createEmployeeAccount,
   forgotPassword,
   resetPassword,
@@ -12,6 +13,7 @@ const upload = require('../middlewares/upload');
 
 // Auth routes
 router.post('/login', login);
+router.post('/register', registerAdmin);
 
 // Forgot / Reset Password
 router.post('/forgot-password', forgotPassword); // generates token, emails user

@@ -2,7 +2,7 @@ const Leave = require('../models/leave');
 
 exports.getLeaves = async (req, res) => {
   try {
-    const leaves = await Leave.find()
+    const leaves = await Leave.find({ tenantId: req.user.tenantId })
       .populate({
         path: 'employee',
         select: 'name email position'
@@ -25,6 +25,8 @@ exports.requestLeave = async (req, res) => {
     const { departmentId, leaveType, days, fromDate, toDate, reason } = req.body;
 
     const leave = await Leave.create({
+      tenantId: req.user.tenantId,
+
       // ✅ IMPORTANT FIX
       employee: req.user.employeeId,
 
@@ -52,8 +54,8 @@ exports.updateLeaveStatus = async (req, res) => {
   try {
     const { status } = req.body;
 
-    const leave = await Leave.findByIdAndUpdate(
-      req.params.id,
+    const leave = await Leave.findOneAndUpdate(
+      { _id: req.params.id, tenantId: req.user.tenantId },
       {
         status,
         seen: false

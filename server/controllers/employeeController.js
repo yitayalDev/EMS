@@ -21,6 +21,7 @@ const createEmployee = async (req, res) => {
             email,
             password: hashedPassword,
             role: 'employee',
+            tenantId: req.user.tenantId
         });
         await user.save();
 
@@ -38,6 +39,7 @@ const createEmployee = async (req, res) => {
             position,
             status: status || 'active',
             image: imagePath,
+            tenantId: req.user.tenantId
         });
         await employee.save();
 
@@ -53,7 +55,7 @@ const createEmployee = async (req, res) => {
 
 const getEmployees = async (req, res) => {
     try {
-        const employees = await Employee.find().populate('department').populate('user');
+        const employees = await Employee.find({ tenantId: req.user.tenantId }).populate('department').populate('user');
         res.json(employees);
     } catch (err) {
         console.error('Error fetching employees:', err);
@@ -67,7 +69,7 @@ const getEmployee = async (req, res) => {
         // 🔹 Guard against route shadowing
         if (id === 'ping' || id === 'permissions') return;
 
-        const employee = await Employee.findById(id)
+        const employee = await Employee.findOne({ _id: id, tenantId: req.user.tenantId })
             .populate('department', 'name')
             .populate('user', 'email role permissions');
 
@@ -81,7 +83,7 @@ const getEmployee = async (req, res) => {
 
 const updateEmployee = async (req, res) => {
     try {
-        const employee = await Employee.findById(req.params.id);
+        const employee = await Employee.findOne({ _id: req.params.id, tenantId: req.user.tenantId });
         if (!employee) return res.status(404).json({ message: 'Employee not found' });
 
         const { name, email, password, dob, joinDate, departmentId, position, status } = req.body;
@@ -117,7 +119,7 @@ const updateEmployee = async (req, res) => {
 
 const deleteEmployee = async (req, res) => {
     try {
-        const employee = await Employee.findById(req.params.id);
+        const employee = await Employee.findOne({ _id: req.params.id, tenantId: req.user.tenantId });
         if (!employee) return res.status(404).json({ message: 'Employee not found' });
 
         await User.findByIdAndDelete(employee.user);
@@ -131,7 +133,7 @@ const deleteEmployee = async (req, res) => {
 
 const updatePermissions = async (req, res) => {
     try {
-        const employee = await Employee.findById(req.params.id);
+        const employee = await Employee.findOne({ _id: req.params.id, tenantId: req.user.tenantId });
         if (!employee) return res.status(404).json({ message: 'Employee not found' });
 
         const user = await User.findById(employee.user);

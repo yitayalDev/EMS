@@ -6,6 +6,7 @@ import RoleBasedRoute from "./utils/RoleBasedRoute.jsx";
 import Login from "./pages/Login.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx"; // ✅ added
+import RegisterCompany from "./pages/RegisterCompany.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import EmployeeDashboard from "./pages/EmployeeDashboard.jsx";
 
@@ -13,6 +14,7 @@ const App = () => (
   <AuthProvider>
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<RegisterCompany />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* ✅ added */}
 

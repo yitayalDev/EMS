@@ -97,7 +97,11 @@ exports.checkIn = async (req, res) => {
         if (!validation.allowed) return res.status(403).json({ message: validation.reason });
 
         const today = moment().format('YYYY-MM-DD');
-        const existing = await Attendance.findOne({ employee: employee._id, date: today });
+        const existing = await Attendance.findOne({
+            employee: employee._id,
+            date: today,
+            tenantId: req.user.tenantId
+        });
 
         if (existing && existing.checkIn) {
             return res.status(400).json({ message: 'Already checked in today.' });
@@ -107,22 +111,19 @@ exports.checkIn = async (req, res) => {
         const status = deriveStatus(now);
         const ip = getClientIp(req);
 
-        const record = await Attendance.findOneAndUpdate(
-            { employee: employee._id, date: today },
-            {
-                checkIn: now,
-                status,
-                ipAddress: ip,
+        status,
+            ipAddress: ip,
                 location: lat != null && lng != null ? { lat, lng } : undefined,
-            },
-            { upsert: true, new: true, setDefaultsOnInsert: true }
+                    tenantId: req.user.tenantId
+    },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
         );
 
-        res.status(200).json({ message: 'Checked in successfully.', record });
-    } catch (err) {
-        console.error('checkIn error:', err);
-        res.status(500).json({ message: 'Server error during check-in.' });
-    }
+    res.status(200).json({ message: 'Checked in successfully.', record });
+} catch (err) {
+    console.error('checkIn error:', err);
+    res.status(500).json({ message: 'Server error during check-in.' });
+}
 };
 
 /**
@@ -134,7 +135,11 @@ exports.checkOut = async (req, res) => {
         if (!employee) return res.status(404).json({ message: 'Employee profile not found.' });
 
         const today = moment().format('YYYY-MM-DD');
-        const record = await Attendance.findOne({ employee: employee._id, date: today });
+        const record = await Attendance.findOne({
+            employee: employee._id,
+            date: today,
+            tenantId: req.user.tenantId
+        });
 
         if (!record || !record.checkIn) {
             return res.status(400).json({ message: 'No check-in found for today.' });
@@ -167,7 +172,11 @@ exports.getTodayStatus = async (req, res) => {
         if (!employee) return res.status(404).json({ message: 'Employee profile not found.' });
 
         const today = moment().format('YYYY-MM-DD');
-        const record = await Attendance.findOne({ employee: employee._id, date: today });
+        const record = await Attendance.findOne({
+            employee: employee._id,
+            date: today,
+            tenantId: req.user.tenantId
+        });
 
         res.status(200).json({ record: record || null });
     } catch (err) {
@@ -198,6 +207,7 @@ exports.getMyTimesheets = async (req, res) => {
 
         const records = await Attendance.find({
             employee: employee._id,
+            tenantId: req.user.tenantId,
             date: { $gte: startDate, $lte: endDate },
         }).sort({ date: 1 });
 
@@ -239,7 +249,10 @@ exports.getAllAttendance = async (req, res) => {
             endDate = ref.clone().endOf('isoWeek').format('YYYY-MM-DD');
         }
 
-        const filter = { date: { $gte: startDate, $lte: endDate } };
+        const filter = {
+            date: { $gte: startDate, $lte: endDate },
+            tenantId: req.user.tenantId
+        };
         if (employeeId) filter.employee = employeeId;
         if (status) filter.status = status;
 

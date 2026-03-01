@@ -5,9 +5,9 @@ const Salary = require('../models/salary');
 
 exports.getAdminSummary = async (req, res) => {
   try {
-    const totalEmployees = await Employee.countDocuments();
-    const totalDepartments = await Department.countDocuments();
-    const pendingLeaves = await Leave.countDocuments({ status: 'pending' });
+    const totalEmployees = await Employee.countDocuments({ tenantId: req.user.tenantId });
+    const totalDepartments = await Department.countDocuments({ tenantId: req.user.tenantId });
+    const pendingLeaves = await Leave.countDocuments({ tenantId: req.user.tenantId, status: 'pending' });
 
     res.json({ totalEmployees, totalDepartments, pendingLeaves });
   } catch (err) {
@@ -18,10 +18,11 @@ exports.getAdminSummary = async (req, res) => {
 exports.getEmployeeSummary = async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
-    const totalLeaves = await Leave.countDocuments({ employee: employeeId });
+    const totalLeaves = await Leave.countDocuments({ employee: employeeId, tenantId: req.user.tenantId });
     const pendingLeaves = await Leave.countDocuments({
       employee: employeeId,
-      status: 'pending'
+      status: 'pending',
+      tenantId: req.user.tenantId
     });
 
     res.json({ totalLeaves, pendingLeaves });
@@ -49,7 +50,7 @@ const lastNMonthsDate = (n) => {
 exports.getMonthlySalary = async (req, res) => {
   try {
     const data = await Salary.aggregate([
-      { $match: { payDate: { $gte: lastNMonthsDate(12) } } },
+      { $match: { payDate: { $gte: lastNMonthsDate(12) }, tenantId: req.user.tenantId } },
       {
         $group: {
           _id: { year: { $year: '$payDate' }, month: { $month: '$payDate' } },
@@ -82,12 +83,13 @@ exports.getMonthlySalary = async (req, res) => {
 exports.getLeaveAnalytics = async (req, res) => {
   try {
     const byType = await Leave.aggregate([
+      { $match: { tenantId: req.user.tenantId } },
       { $group: { _id: '$leaveType', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
     ]);
 
     const byMonth = await Leave.aggregate([
-      { $match: { createdAt: { $gte: lastNMonthsDate(12) } } },
+      { $match: { createdAt: { $gte: lastNMonthsDate(12) }, tenantId: req.user.tenantId } },
       {
         $group: {
           _id: {
@@ -125,7 +127,7 @@ exports.getLeaveAnalytics = async (req, res) => {
 exports.getDepartmentAnalytics = async (req, res) => {
   try {
     const empByDept = await Employee.aggregate([
-      { $match: { status: 'active' } },
+      { $match: { status: 'active', tenantId: req.user.tenantId } },
       { $group: { _id: '$department', employees: { $sum: 1 } } },
       {
         $lookup: {
@@ -146,6 +148,7 @@ exports.getDepartmentAnalytics = async (req, res) => {
     ]);
 
     const leaveByDept = await Leave.aggregate([
+      { $match: { tenantId: req.user.tenantId } },
       { $group: { _id: '$department', leaves: { $sum: 1 } } },
       {
         $lookup: {

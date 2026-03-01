@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
+  tenantId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Root admins have no tenantId (or it's themselves)
   name: String,
   email: { type: String, unique: true },
   password: String,

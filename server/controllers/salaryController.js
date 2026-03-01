@@ -1,9 +1,8 @@
 const Salary = require('../models/salary');
 
-// Admin: Get all salaries
 exports.getSalaries = async (req, res) => {
   try {
-    const salaries = await Salary.find()
+    const salaries = await Salary.find({ tenantId: req.user.tenantId })
       .populate('employee')
       .populate('department')
       .sort({ payDate: -1 });
@@ -22,6 +21,7 @@ exports.createSalary = async (req, res) => {
     const netSalary = Number(basic) + Number(allowance || 0) - Number(deductions || 0);
 
     const salary = await Salary.create({
+      tenantId: req.user.tenantId,
       employee: employeeId,
       department: departmentId,
       basic,
@@ -45,8 +45,10 @@ exports.getMySalary = async (req, res) => {
       return res.status(400).json({ message: 'Employee ID not found' });
     }
 
-    const salary = await Salary.findOne({ employee: req.user.employeeId })
-      .populate('department');
+    const salary = await Salary.findOne({
+      employee: req.user.employeeId,
+      tenantId: req.user.tenantId
+    }).populate('department');
 
     if (!salary) {
       return res.status(404).json({ message: 'Salary record not found' });
