@@ -1,0 +1,29 @@
+{
+    "sidebar": {
+        "dashboard": "Tableau de bord",
+        "profile": "Mon Profil",
+        "leave": "Congés",
+        "salary": "Salaire",
+        "attendance": "Présence",
+        "timesheet": "Feuille de temps",
+        "settings": "Paramètres",
+        "employees": "Employés",
+        "departments": "Départements",
+        "adminDashboard": "Tableau de bord Admin",
+        "billing": "Facturation"
+    },
+    "navbar": {
+        "welcome": "Bienvenue",
+        "logout": "Déconnexion",
+        "language": "Langue"
+    },
+    "dashboard": {
+        "totalEmployees": "Total des employés",
+        "departments": "Départements",
+        "pendingLeaves": "Congés en attente",
+        "totalLeaves": "Total des congés",
+        "employeeDistribution": "Répartition des Employés",
+        "announcements": "Annonces",
+        "noAnnouncements": "Aucune annonce pour le moment."
+    }
+}

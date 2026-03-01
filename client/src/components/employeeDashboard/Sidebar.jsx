@@ -3,6 +3,7 @@ import { useSidebar } from '../../context/SidebarContext';
 import { useAuth } from '../../context/AuthContext';
 import { useState, useEffect } from 'react';
 import { LayoutDashboard, User, Calendar, DollarSign, Clock, FileText, Settings, ShieldCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 
@@ -10,6 +11,7 @@ const linkClass = ({ isActive }) =>
   `flex items-center gap-3 px-4 py-2 text-sm rounded-xl transition-all duration-300 ${isActive ? 'bg-white/40 text-gray-900 font-bold shadow-md' : 'text-gray-900 hover:bg-white/20'}`;
 
 const Sidebar = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { isOpen, closeSidebar } = useSidebar();
   const gradients = [
@@ -65,31 +67,31 @@ const Sidebar = () => {
         <nav className="p-4 space-y-2 backdrop-blur-xl bg-white/20 h-full">
           <NavLink to="/employee" end className={linkClass}>
             <LayoutDashboard size={18} />
-            <span>Dashboard</span>
+            <span>{t('sidebar.dashboard')}</span>
           </NavLink>
           <NavLink to="/employee/profile" className={linkClass}>
             <User size={18} />
-            <span>My Profile</span>
+            <span>{t('sidebar.profile')}</span>
           </NavLink>
           <NavLink to="/employee/leaves" className={linkClass}>
             <Calendar size={18} />
-            <span>Leave</span>
+            <span>{t('sidebar.leave')}</span>
           </NavLink>
           <NavLink to="/employee/salary" className={linkClass}>
             <DollarSign size={18} />
-            <span>Salary</span>
+            <span>{t('sidebar.salary')}</span>
           </NavLink>
           <NavLink to="/employee/attendance" className={linkClass}>
             <Clock size={18} />
-            <span>Attendance</span>
+            <span>{t('sidebar.attendance')}</span>
           </NavLink>
           <NavLink to="/employee/timesheet" className={linkClass}>
             <FileText size={18} />
-            <span>Timesheet</span>
+            <span>{t('sidebar.timesheet')}</span>
           </NavLink>
           <NavLink to="/employee/settings" className={linkClass}>
             <Settings size={18} />
-            <span>Settings</span>
+            <span>{t('sidebar.settings')}</span>
           </NavLink>
         </nav>
       </aside>

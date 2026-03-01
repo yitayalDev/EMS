@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import api, { API_BASE_URL } from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import { TableSkeleton } from "../common/SkeletonLoader.jsx";
+import { motion } from "framer-motion";
 
 const EmployeeList = ({ highlightId }) => {
   const { user } = useAuth();
@@ -65,10 +67,15 @@ const EmployeeList = ({ highlightId }) => {
         )}
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-200">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-200"
+      >
         <div className="overflow-x-auto hover:shadow-xl transition-all duration-300">
           {loading ? (
-            <div className="p-6 text-center text-gray-500 dark:text-gray-400">Loading employees...</div>
+            <TableSkeleton rows={limit} />
           ) : employees.length === 0 ? (
             <div className="p-6 text-center text-gray-500 dark:text-gray-400">No employees found.</div>
           ) : (
@@ -82,9 +89,20 @@ const EmployeeList = ({ highlightId }) => {
                   <th className="px-4 py-3 text-left">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <motion.tbody
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 1, transition: { staggerChildren: 0.05 } }
+                }}
+              >
                 {employees.map((emp, i) => (
-                  <tr
+                  <motion.tr
+                    variants={{
+                      hidden: { opacity: 0, x: -10 },
+                      visible: { opacity: 1, x: 0 }
+                    }}
                     key={emp._id}
                     className={`border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200
                                 ${highlightId === emp._id ? "animate-pulse bg-green-50 dark:bg-green-900/30" : ""}`}
@@ -129,9 +147,9 @@ const EmployeeList = ({ highlightId }) => {
                         </button>
                       )}
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
-              </tbody>
+              </motion.tbody>
             </table>
           )}
         </div>
@@ -160,7 +178,7 @@ const EmployeeList = ({ highlightId }) => {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {confirmDeleteId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

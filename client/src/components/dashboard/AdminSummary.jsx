@@ -3,8 +3,10 @@ import api from '../../utils/api.js';
 import SummaryCard from './SummaryCard.jsx';
 import NoticeBoard from './NoticeBoard.jsx';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 const AdminSummary = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState({
     totalEmployees: 0,
     totalDepartments: 0,
@@ -32,9 +34,9 @@ const AdminSummary = () => {
   return (
     <div className="space-y-6">
       <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-6 transition-colors duration-200">
-        <SummaryCard label="Total Employees" value={stats.totalEmployees} color="teal" />
-        <SummaryCard label="Departments" value={stats.totalDepartments} color="purple" />
-        <SummaryCard label="Pending Leaves" value={stats.pendingLeaves} color="orange" />
+        <SummaryCard label={t('dashboard.totalEmployees')} value={stats.totalEmployees} color="teal" />
+        <SummaryCard label={t('dashboard.departments')} value={stats.totalDepartments} color="purple" />
+        <SummaryCard label={t('dashboard.pendingLeaves')} value={stats.pendingLeaves} color="orange" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -45,7 +47,7 @@ const AdminSummary = () => {
 
         {/* Department Distribution Chart */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col h-[500px]">
-          <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100">Employee Distribution</h2>
+          <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100">{t('dashboard.employeeDistribution')}</h2>
           <div className="flex-1 min-h-0">
             {deptData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">

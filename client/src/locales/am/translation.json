@@ -1,0 +1,29 @@
+{
+    "sidebar": {
+        "dashboard": "ዳሽቦርድ",
+        "profile": "የእኔ መገለጫ",
+        "leave": "ፈቃድ",
+        "salary": "ደመወዝ",
+        "attendance": "ክፍልፍሎሽ",
+        "timesheet": "የጊዜ ሰሌዳ",
+        "settings": "ቅንብሮች",
+        "employees": "ሰራተኞች",
+        "departments": "ክፍሎች",
+        "adminDashboard": "የአስተዳዳሪ ዳሽቦርድ",
+        "billing": "ክፍያ"
+    },
+    "navbar": {
+        "welcome": "እንኳን በደህና መጡ",
+        "logout": "ውጣ",
+        "language": "ቋንቋ"
+    },
+    "dashboard": {
+        "totalEmployees": "ጠቅላላ ሰራተኞች",
+        "departments": "ክፍሎች",
+        "pendingLeaves": "በመጠባበቅ ላይ ያሉ ፈቃዶች",
+        "totalLeaves": "ጠቅላላ ፈቃዶች",
+        "employeeDistribution": "የሰራተኞች ስርጭት",
+        "announcements": "ማስታወቂያዎች",
+        "noAnnouncements": "በአሁኑ ጊዜ ምንም ማስታወቂያ የለም።"
+    }
+}

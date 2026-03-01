@@ -1,0 +1,29 @@
+{
+    "sidebar": {
+        "dashboard": "Panel",
+        "profile": "Mi Perfil",
+        "leave": "Licencia",
+        "salary": "Salario",
+        "attendance": "Asistencia",
+        "timesheet": "Hoja de horas",
+        "settings": "Ajustes",
+        "employees": "Empleados",
+        "departments": "Departamentos",
+        "adminDashboard": "Panel de Admin",
+        "billing": "Facturación"
+    },
+    "navbar": {
+        "welcome": "Bienvenido",
+        "logout": "Cerrar sesión",
+        "language": "Idioma"
+    },
+    "dashboard": {
+        "totalEmployees": "Total de Empleados",
+        "departments": "Departamentos",
+        "pendingLeaves": "Licencias Pendientes",
+        "totalLeaves": "Total de Licencias",
+        "employeeDistribution": "Distribución de Empleados",
+        "announcements": "Anuncios",
+        "noAnnouncements": "No hay anuncios en este momento."
+    }
+}

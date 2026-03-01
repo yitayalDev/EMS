@@ -3,6 +3,7 @@ import { useSidebar } from '../../context/SidebarContext';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { LayoutDashboard, Users, Building, Calendar, DollarSign, Clock, CreditCard, Settings, ShieldCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 
@@ -10,6 +11,7 @@ const linkClass = ({ isActive }) =>
   `flex items-center gap-3 px-4 py-2 text-sm rounded-xl transition-all duration-300 ${isActive ? 'bg-white/30 text-white shadow-lg backdrop-blur-md font-semibold' : 'text-indigo-100 hover:bg-white/10'}`;
 
 const AdminSidebar = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { isOpen, closeSidebar } = useSidebar();
   // Vibrant, attractive gradient colors
@@ -77,7 +79,7 @@ const AdminSidebar = () => {
           <nav className="p-4 space-y-1 flex-1">
             <NavLink to="/admin" end className={linkClass}>
               <LayoutDashboard size={18} />
-              <span>Dashboard</span>
+              <span>{t('sidebar.dashboard')}</span>
             </NavLink>
 
             {canViewAnalytics && (
@@ -90,42 +92,42 @@ const AdminSidebar = () => {
             {canViewEmployees && (
               <NavLink to="/admin/employees" className={linkClass}>
                 <Users size={18} />
-                <span>Employees</span>
+                <span>{t('sidebar.employees')}</span>
               </NavLink>
             )}
 
             {canViewDepartments && (
               <NavLink to="/admin/departments" className={linkClass}>
                 <Building size={18} />
-                <span>Departments</span>
+                <span>{t('sidebar.departments')}</span>
               </NavLink>
             )}
 
             {canViewLeaves && (
               <NavLink to="/admin/leaves" className={linkClass}>
                 <Calendar size={18} />
-                <span>Leaves</span>
+                <span>{t('sidebar.leave')}</span>
               </NavLink>
             )}
 
             {canViewSalary && (
               <NavLink to="/admin/salary" className={linkClass}>
                 <DollarSign size={18} />
-                <span>Salary</span>
+                <span>{t('sidebar.salary')}</span>
               </NavLink>
             )}
 
             {canViewAttendance && (
               <NavLink to="/admin/attendance" className={linkClass}>
                 <Clock size={18} />
-                <span>Attendance</span>
+                <span>{t('sidebar.attendance')}</span>
               </NavLink>
             )}
 
             {hasRole(['admin', 'finance']) && (
               <NavLink to="/admin/billing" className={linkClass}>
                 <CreditCard size={18} />
-                <span>Billing</span>
+                <span>{t('sidebar.billing')}</span>
               </NavLink>
             )}
 
@@ -136,7 +138,7 @@ const AdminSidebar = () => {
 
             <NavLink to="/admin/settings" className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-white/30 text-white shadow-lg backdrop-blur-md' : 'text-indigo-100 hover:bg-white/10'}`}>
               <ShieldCheck size={18} />
-              <span>Security</span>
+              <span>{t('sidebar.settings')}</span>
             </NavLink>
           </nav>
         </div>

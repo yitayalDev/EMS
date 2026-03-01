@@ -3,8 +3,10 @@ import { format } from "date-fns";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import { Bell, AlertCircle, PlusCircle, Trash2 } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const NoticeBoard = () => {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const [notices, setNotices] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -55,7 +57,7 @@ const NoticeBoard = () => {
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold flex items-center text-gray-900 dark:text-gray-100">
                     <Bell className="w-5 h-5 mr-2 text-indigo-500" />
-                    Announcements
+                    {t('dashboard.announcements')}
                 </h2>
                 {isAdminOrHR && (
                     <button
@@ -73,15 +75,15 @@ const NoticeBoard = () => {
                 ) : notices.length === 0 ? (
                     <div className="flex flex-col items-center justify-center text-gray-400 py-10">
                         <Bell className="w-10 h-10 mb-2 opacity-50" />
-                        <p>No new announcements</p>
+                        <p>{t('dashboard.noAnnouncements')}</p>
                     </div>
                 ) : (
                     notices.map((notice) => (
                         <div
                             key={notice._id}
                             className={`p-4 rounded-xl border ${notice.isImportant
-                                    ? "bg-red-50/50 border-red-100 dark:bg-red-900/10 dark:border-red-900/30"
-                                    : "bg-gray-50 border-gray-100 dark:bg-gray-700/50 dark:border-gray-600"
+                                ? "bg-red-50/50 border-red-100 dark:bg-red-900/10 dark:border-red-900/30"
+                                : "bg-gray-50 border-gray-100 dark:bg-gray-700/50 dark:border-gray-600"
                                 } relative group`}
                         >
                             <div className="flex items-start justify-between">

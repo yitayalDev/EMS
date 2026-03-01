@@ -1,0 +1,29 @@
+{
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "profile": "My Profile",
+        "leave": "Leave",
+        "salary": "Salary",
+        "attendance": "Attendance",
+        "timesheet": "Timesheet",
+        "settings": "Settings",
+        "employees": "Employees",
+        "departments": "Departments",
+        "adminDashboard": "Admin Dashboard",
+        "billing": "Billing"
+    },
+    "navbar": {
+        "welcome": "Welcome",
+        "logout": "Logout",
+        "language": "Language"
+    },
+    "dashboard": {
+        "totalEmployees": "Total Employees",
+        "departments": "Departments",
+        "pendingLeaves": "Pending Leaves",
+        "totalLeaves": "Total Leaves",
+        "employeeDistribution": "Employee Distribution",
+        "announcements": "Announcements",
+        "noAnnouncements": "No announcements at this time."
+    }
+}
