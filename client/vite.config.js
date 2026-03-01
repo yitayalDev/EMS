@@ -17,19 +17,7 @@ export default defineConfig({
         description: 'Employee Management System Portal',
         theme_color: '#4f46e5',
         background_color: '#1f2937',
-        display: 'standalone',
-        icons: [
-          {
-            src: '/ems-logo.png', // Fallback for 192/512 if provided later
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: '/ems-logo.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
+        display: 'standalone'
       }
     })
   ],
