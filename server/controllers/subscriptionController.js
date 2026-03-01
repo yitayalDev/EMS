@@ -1,4 +1,5 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder';
+const stripe = require('stripe')(stripeSecretKey);
 const Subscription = require('../models/subscription');
 const User = require('../models/user');
 
