@@ -19,4 +19,28 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Response Interceptor for Global Error Handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      const { status, data } = error.response;
+
+      // Auto-logout on 401 (Unauthorized)
+      if (status === 401) {
+        localStorage.removeItem('ems_token');
+        if (!window.location.pathname.includes('/login')) {
+          window.location.href = '/login';
+        }
+      }
+
+      // Redirect to billing on 403 (Forbidden - Inactive Subscription)
+      if (status === 403 && data.billingUrl) {
+        window.location.href = data.billingUrl;
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
