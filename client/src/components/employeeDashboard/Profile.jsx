@@ -6,6 +6,7 @@ const Profile = () => {
   const { user } = useAuth();
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   // 🌈 Background gradients (ONLY change)
   const gradients = [
@@ -31,9 +32,12 @@ const Profile = () => {
         return;
       }
       try {
+        console.log("Fetching profile for employeeId:", user.employeeId);
         const { data } = await api.get(`employees/${user.employeeId}`);
         setEmployee(data);
       } catch (err) {
+        console.error("Profile fetch error:", err.response?.data || err.message);
+        setErrorMsg(err.response?.data?.message || err.message);
         setEmployee(null);
       } finally {
         setLoading(false);
@@ -45,7 +49,13 @@ const Profile = () => {
   if (loading)
     return <div className="text-center mt-20 text-gray-500 dark:text-gray-400">Loading...</div>;
   if (!employee)
-    return <div className="text-center mt-20 text-gray-500 dark:text-gray-400">No profile data found.</div>;
+    return (
+      <div className="text-center mt-20 text-red-500">
+        No profile data found. <br />
+        Error: {errorMsg} <br />
+        Employee ID Context: {user?.employeeId || 'undefined'}
+      </div>
+    );
 
   return (
     <div

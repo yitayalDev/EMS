@@ -9,7 +9,7 @@ const generateToken = (id, role) =>
   jwt.sign(
     { id, role },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN }
+    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   );
 
 // ---------------- LOGIN ----------------
@@ -48,8 +48,8 @@ exports.login = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Login error:', err.message, err.stack);
+    res.status(500).json({ message: 'Server error', detail: err.message });
   }
 };
 
@@ -125,6 +125,7 @@ exports.createEmployeeAccount = async (req, res) => {
     if (req.file) imagePath = `/upload/${req.file.filename}`;
 
     const employee = new Employee({
+      tenantId: req.user.tenantId,
       user: user._id,
       name,
       email,
