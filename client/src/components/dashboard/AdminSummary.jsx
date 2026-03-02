@@ -12,7 +12,7 @@ import { ShieldCheck } from 'lucide-react';
 
 const AdminSummary = () => {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, can } = useAuth();
   const [stats, setStats] = useState({
     totalEmployees: 0,
     totalDepartments: 0,
