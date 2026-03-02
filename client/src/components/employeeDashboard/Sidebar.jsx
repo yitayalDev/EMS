@@ -24,6 +24,9 @@ const Sidebar = () => {
 
   const [gradientIndex, setGradientIndex] = useState(0);
 
+  const adminPermissions = ['manage_users', 'manage_departments', 'view_salary', 'manage_salary', 'manage_leaves', 'manage_assets', 'manage_notices', 'view_analytics'];
+  const hasAnyAdminPermission = user?.permissions?.some(p => adminPermissions.includes(p));
+
   useEffect(() => {
     const interval = setInterval(() => {
       setGradientIndex((prev) => (prev + 1) % gradients.length);
@@ -69,6 +72,14 @@ const Sidebar = () => {
             <LayoutDashboard size={18} />
             <span>{t('sidebar.dashboard')}</span>
           </NavLink>
+
+          {hasAnyAdminPermission && (
+            <NavLink to="/admin" className="flex items-center gap-3 px-4 py-2 text-sm rounded-xl transition-all duration-300 bg-indigo-600/20 text-indigo-900 font-bold border border-indigo-600/30 hover:bg-indigo-600/30">
+              <ShieldCheck size={18} className="text-indigo-700" />
+              <span>Management Portal</span>
+            </NavLink>
+          )}
+
           <NavLink to="/employee/profile" className={linkClass}>
             <User size={18} />
             <span>{t('sidebar.profile')}</span>
