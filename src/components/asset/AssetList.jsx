@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
-import { Package, Plus, Search, Trash2, UserPlus, MoreVertical, Edit } from 'lucide-react';
+import { Package, Plus, Search, Trash2, Edit } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import AddAssetModal from './AddAssetModal';
 
 const AssetList = () => {
     const { can } = useAuth();
     const [assets, setAssets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedAsset, setSelectedAsset] = useState(null);
 
     useEffect(() => {
         fetchAssets();
@@ -15,6 +18,7 @@ const AssetList = () => {
 
     const fetchAssets = async () => {
         try {
+            setLoading(true);
             const { data } = await api.get('/assets');
             setAssets(data);
         } catch (err) {
@@ -22,6 +26,27 @@ const AssetList = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this asset?')) return;
+        try {
+            await api.delete(`/assets/${id}`);
+            fetchAssets();
+        } catch (err) {
+            console.error('Error deleting asset:', err);
+            alert('Failed to delete asset');
+        }
+    };
+
+    const handleEdit = (asset) => {
+        setSelectedAsset(asset);
+        setIsModalOpen(true);
+    };
+
+    const handleAdd = () => {
+        setSelectedAsset(null);
+        setIsModalOpen(true);
     };
 
     const statusColors = {
@@ -48,7 +73,10 @@ const AssetList = () => {
                 </div>
 
                 {can('manage_assets') && (
-                    <button className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-indigo-200 active:scale-95">
+                    <button
+                        onClick={handleAdd}
+                        className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-indigo-200 active:scale-95"
+                    >
                         <Plus size={18} />
                         <span>Add New Asset</span>
                     </button>
@@ -107,7 +135,7 @@ const AssetList = () => {
                                             {asset.assignedTo ? (
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-7 h-7 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold ring-2 ring-white">
-                                                        {asset.assignedTo.name.charAt(0)}
+                                                        {asset.assignedTo.name?.charAt(0) || '?'}
                                                     </div>
                                                     <span className="text-sm font-medium text-gray-700">{asset.assignedTo.name}</span>
                                                 </div>
@@ -123,12 +151,20 @@ const AssetList = () => {
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 {can('manage_assets') && (
-                                                    <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit">
+                                                    <button
+                                                        onClick={() => handleEdit(asset)}
+                                                        className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                        title="Edit"
+                                                    >
                                                         <Edit size={16} />
                                                     </button>
                                                 )}
                                                 {can('delete_records') && (
-                                                    <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                                                    <button
+                                                        onClick={() => handleDelete(asset._id)}
+                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                        title="Delete"
+                                                    >
                                                         <Trash2 size={16} />
                                                     </button>
                                                 )}
@@ -141,6 +177,13 @@ const AssetList = () => {
                     </table>
                 </div>
             </div>
+
+            <AddAssetModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onRefresh={fetchAssets}
+                asset={selectedAsset}
+            />
         </div>
     );
 };
