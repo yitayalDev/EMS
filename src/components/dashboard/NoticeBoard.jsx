@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 const NoticeBoard = () => {
     const { t } = useTranslation();
-    const { user } = useAuth();
+    const { user, can } = useAuth();
     const [notices, setNotices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [newNotice, setNewNotice] = useState({ title: "", content: "", isImportant: false });
 
-    const isAdminOrHR = user?.role === 'admin' || user?.role === 'hr';
+    const canManage = can('manage_notices');
 
     const fetchNotices = async () => {
         try {
@@ -59,7 +59,7 @@ const NoticeBoard = () => {
                     <Bell className="w-5 h-5 mr-2 text-indigo-500" />
                     {t('dashboard.announcements')}
                 </h2>
-                {isAdminOrHR && (
+                {canManage && (
                     <button
                         onClick={() => setShowModal(true)}
                         className="text-sm flex items-center bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/40 dark:text-indigo-300 px-3 py-1.5 rounded-lg transition"
@@ -94,7 +94,7 @@ const NoticeBoard = () => {
                                     </h3>
                                     <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">{notice.content}</p>
                                 </div>
-                                {isAdminOrHR && (
+                                {canManage && (
                                     <button
                                         onClick={() => handleDelete(notice._id)}
                                         className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition ml-2"

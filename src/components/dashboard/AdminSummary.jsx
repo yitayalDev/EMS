@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import ActivityFeed from './ActivityFeed.jsx';
 import { Calendar, ArrowUpRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { ShieldCheck } from 'lucide-react';
 
 const AdminSummary = () => {
   const { t } = useTranslation();
@@ -126,29 +127,36 @@ const AdminSummary = () => {
           </div>
 
           <div className="flex-1 min-h-0">
-            {deptData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={deptData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#8884d8" strokeOpacity={0.1} />
-                  <XAxis dataKey="department" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 'bold' }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 'bold' }} />
-                  <Tooltip
-                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                    contentStyle={{
-                      backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                      borderRadius: '16px',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      backdropFilter: 'blur(8px)',
-                      boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)'
-                    }}
-                  />
-                  <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: 'bold' }} />
-                  <Bar dataKey="employees" name="Employees" fill="#6366f1" radius={[8, 8, 8, 8]} barSize={24} />
-                  <Bar dataKey="leaves" name="Leaves" fill="#f59e0b" radius={[8, 8, 8, 8]} barSize={24} />
-                </BarChart>
-              </ResponsiveContainer>
+            {can('view_analytics') ? (
+              deptData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={deptData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#8884d8" strokeOpacity={0.1} />
+                    <XAxis dataKey="department" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 'bold' }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 'bold' }} />
+                    <Tooltip
+                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                      contentStyle={{
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        backdropFilter: 'blur(8px)',
+                        boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)'
+                      }}
+                    />
+                    <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: 'bold' }} />
+                    <Bar dataKey="employees" name="Employees" fill="#6366f1" radius={[8, 8, 8, 8]} barSize={24} />
+                    <Bar dataKey="leaves" name="Leaves" fill="#f59e0b" radius={[8, 8, 8, 8]} barSize={24} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-full flex items-center justify-center italic text-gray-500 text-sm">No data available</div>
+              )
             ) : (
-              <div className="h-full flex items-center justify-center italic text-gray-500 text-sm">No data available</div>
+              <div className="h-full flex flex-col items-center justify-center text-gray-500 text-center space-y-4">
+                <ShieldCheck size={48} className="opacity-20" />
+                <p className="text-sm font-medium">Analytics restricted to authorized personnel only.</p>
+              </div>
             )}
           </div>
         </motion.div>
