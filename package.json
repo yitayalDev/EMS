@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "vite client",
+    "build": "vite build client",
+    "lint": "eslint client",
+    "preview": "vite preview client"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
