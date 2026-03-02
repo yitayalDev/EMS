@@ -18,6 +18,7 @@ import Setting from "../components/employeeDashboard/Setting.jsx";
 import AttendanceList from "../components/dashboard/AttendanceList.jsx";
 import BillingDashboard from "../components/dashboard/BillingDashboard.jsx";
 import CompanySettings from "../components/dashboard/CompanySettings.jsx";
+import AssetList from "../components/asset/AssetList.jsx";
 import { useState, useEffect } from "react";
 import api from "../utils/api";
 
@@ -81,6 +82,8 @@ const AdminDashboard = () => {
             {(hasRole(['admin', 'finance'])) && (
               <Route path="billing" element={<BillingDashboard />} />
             )}
+
+            <Route path="assets" element={<AssetList />} />
 
 
             {(user?.role === 'admin') && (

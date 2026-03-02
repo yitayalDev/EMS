@@ -2,7 +2,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { useSidebar } from '../../context/SidebarContext';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { LayoutDashboard, Users, Building, Calendar, DollarSign, Clock, CreditCard, Settings, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Users, Building, Calendar, DollarSign, Clock, CreditCard, Settings, ShieldCheck, Package } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
@@ -102,6 +102,11 @@ const AdminSidebar = () => {
                 <span>{t('sidebar.departments')}</span>
               </NavLink>
             )}
+
+            <NavLink to="/admin/assets" className={linkClass}>
+              <Package size={18} />
+              <span>Assets</span>
+            </NavLink>
 
             {canViewLeaves && (
               <NavLink to="/admin/leaves" className={linkClass}>

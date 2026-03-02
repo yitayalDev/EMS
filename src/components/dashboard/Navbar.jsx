@@ -2,7 +2,8 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { useTheme } from '../../context/ThemeContext.jsx';
 import { useSidebar } from '../../context/SidebarContext.jsx';
 import { useState, useEffect } from 'react';
-import { Sun, Moon, Menu, Globe } from 'lucide-react';
+import { Sun, Moon, Menu, Globe, Bell, CheckCircle2 } from 'lucide-react';
+import api from '../../utils/api';
 import { useTranslation } from 'react-i18next';
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
@@ -23,11 +24,38 @@ const Navbar = () => {
 
   const { t, i18n } = useTranslation();
   const [gradientIndex, setGradientIndex] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
 
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 30000); // Poll every 30s
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const { data } = await api.get('/notifications');
+      setNotifications(data);
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  };
+
+  const markRead = async () => {
+    try {
+      if (notifications.some(n => !n.isRead)) {
+        await api.put('/notifications/mark-as-read');
+        fetchNotifications();
+      }
+    } catch (err) {
+      console.error('Error marking read:', err);
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -66,6 +94,64 @@ const Navbar = () => {
         <div className="text-right hidden sm:block">
           <p className="text-xs text-white/70 font-medium uppercase tracking-wider">Logged in as</p>
           <p className="text-sm font-bold text-white">{user?.name}</p>
+        </div>
+
+        {/* Notifications */}
+        <div className="relative">
+          <button
+            onClick={() => {
+              setShowNotifications(!showNotifications);
+              if (!showNotifications) markRead();
+            }}
+            className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 transition-colors text-white flex items-center justify-center relative shadow-lg shadow-black/20"
+            aria-label="View Notifications"
+          >
+            <Bell size={20} className={notifications.some(n => !n.isRead) ? 'animate-bounce text-yellow-300' : 'text-white'} />
+            {notifications.filter(n => !n.isRead).length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white animate-pulse">
+                {notifications.filter(n => !n.isRead).length}
+              </span>
+            )}
+          </button>
+
+          {showNotifications && (
+            <div className="absolute right-0 mt-3 w-80 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden transform origin-top-right transition-all duration-300 z-[60]">
+              <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-indigo-50/50 dark:bg-gray-800/50">
+                <h3 className="font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                  <Bell size={16} className="text-indigo-600" />
+                  Notifications
+                </h3>
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Recent Activity</span>
+              </div>
+              <div className="max-h-[70vh] overflow-y-auto">
+                {notifications.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Bell size={24} className="text-gray-300" />
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic">No notifications yet.</p>
+                  </div>
+                ) : (
+                  notifications.map((notif) => (
+                    <div
+                      key={notif._id}
+                      className={`p-4 border-b border-gray-50 dark:border-gray-800 transition-colors hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 ${!notif.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10 border-l-4 border-l-indigo-500' : ''}`}
+                    >
+                      <div className="flex gap-3">
+                        <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${notif.type === 'success' ? 'bg-green-100 text-green-600' : 'bg-indigo-100 text-indigo-600'}`}>
+                          {notif.type === 'success' ? <CheckCircle2 size={16} /> : <Bell size={16} />}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 leading-tight mb-1">{notif.message}</p>
+                          <p className="text-[10px] text-gray-400 font-medium">{new Date(notif.createdAt).toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Dark Mode Toggle */}
