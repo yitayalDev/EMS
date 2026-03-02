@@ -53,9 +53,9 @@ const NoticeBoard = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col h-full">
+        <div className="bg-white/5 dark:bg-gray-900/40 backdrop-blur-xl rounded-2xl border-2 border-white/10 p-6 h-full flex flex-col">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold flex items-center text-gray-900 dark:text-gray-100">
+                <h2 className="text-xl font-bold flex items-center text-gray-900 dark:text-white uppercase tracking-wider">
                     <Bell className="w-5 h-5 mr-2 text-indigo-500" />
                     {t('dashboard.announcements')}
                 </h2>
@@ -82,8 +82,8 @@ const NoticeBoard = () => {
                         <div
                             key={notice._id}
                             className={`p-4 rounded-xl border ${notice.isImportant
-                                ? "bg-red-50/50 border-red-100 dark:bg-red-900/10 dark:border-red-900/30"
-                                : "bg-gray-50 border-gray-100 dark:bg-gray-700/50 dark:border-gray-600"
+                                ? "bg-red-500/10 border-red-500/30 text-red-100 shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+                                : "bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300"
                                 } relative group`}
                         >
                             <div className="flex items-start justify-between">
