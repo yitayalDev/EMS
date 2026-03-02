@@ -13,6 +13,7 @@ const AssetList = () => {
     const [selectedAsset, setSelectedAsset] = useState(null);
 
     useEffect(() => {
+        console.log('DEBUG: AssetList Component Mounted. Version: 1.0.2');
         fetchAssets();
     }, []);
 
@@ -69,7 +70,7 @@ const AssetList = () => {
                 <div>
                     <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
                         <Package className="text-indigo-600" />
-                        Asset Management
+                        Asset Management <span className="text-xs font-normal text-gray-400">v1.0.2-debug</span>
                     </h1>
                     <p className="text-gray-500 text-sm">Track and manage company equipment and hardware.</p>
                 </div>
