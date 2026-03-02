@@ -35,3 +35,6 @@ dist-ssr/
 # Temporary files
 .history/
 build_log.txt
+
+# Sub-repositories
+server/
