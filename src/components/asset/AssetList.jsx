@@ -40,11 +40,13 @@ const AssetList = () => {
     };
 
     const handleEdit = (asset) => {
+        console.log('DEBUG: Editing asset:', asset);
         setSelectedAsset(asset);
         setIsModalOpen(true);
     };
 
     const handleAdd = () => {
+        console.log('DEBUG: Adding new asset modal triggered');
         setSelectedAsset(null);
         setIsModalOpen(true);
     };
