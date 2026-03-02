@@ -13,9 +13,55 @@ const EditEmployee = () => {
     departmentId: '',
     position: '',
     status: 'active',
+    role: 'employee',
+    permissions: [],
   });
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
+
+  const ROLES = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'hr', label: 'HR Manager' },
+    { value: 'finance', label: 'Finance/Payroll Officer' },
+    { value: 'it_admin', label: 'IT Admin' },
+    { value: 'employee', label: 'Employee' }
+  ];
+
+  const PERMISSIONS = [
+    { value: 'manage_users', label: 'Manage Users' },
+    { value: 'delete_records', label: 'Delete Records' },
+    { value: 'view_salary', label: 'View Salary' },
+    { value: 'manage_salary', label: 'Manage Salaries' },
+    { value: 'manage_leaves', label: 'Manage Leaves' },
+    { value: 'manage_assets', label: 'Manage Assets' },
+    { value: 'manage_notices', label: 'Manage Notices' },
+    { value: 'view_analytics', label: 'View Analytics' }
+  ];
+
+  const DEFAULT_MAP = {
+    admin: ['manage_users', 'delete_records', 'view_salary', 'manage_salary', 'manage_leaves', 'manage_assets', 'manage_notices', 'view_analytics'],
+    hr: ['manage_users', 'manage_leaves', 'manage_notices'],
+    finance: ['view_salary', 'manage_salary'],
+    it_admin: ['manage_assets', 'delete_records'],
+    employee: []
+  };
+
+  const handlePermissionToggle = (perm) => {
+    setForm(prev => {
+      const perms = prev.permissions.includes(perm)
+        ? prev.permissions.filter(p => p !== perm)
+        : [...prev.permissions, perm];
+      return { ...prev, permissions: perms };
+    });
+  };
+
+  const handleRoleChange = (e) => {
+    const newRole = e.target.value;
+    setForm({
+      ...form,
+      role: newRole,
+      permissions: DEFAULT_MAP[newRole] || []
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,6 +80,8 @@ const EditEmployee = () => {
           departmentId: e.department?._id || '',
           position: e.position || '',
           status: e.status || 'active',
+          role: e.user?.role || 'employee',
+          permissions: e.user?.permissions || [],
         });
 
         setPreview(e.image ? `${API_BASE_URL}${e.image}` : null);
@@ -133,6 +181,41 @@ const EditEmployee = () => {
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
+
+          <div className="col-span-full pt-4 border-t border-green-400/20">
+            <h3 className="text-lg font-bold text-white mb-4">Advanced Permissions (RBAC)</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-green-300 mb-1">System Role</label>
+                <select
+                  value={form.role}
+                  onChange={handleRoleChange}
+                  className="w-full bg-green-900/40 border border-green-400/30 px-3 py-2 rounded text-white focus:border-green-400 focus:ring focus:ring-green-400/30 outline-none"
+                >
+                  {ROLES.map(r => (
+                    <option key={r.value} value={r.value}>{r.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-green-300 mb-1">Custom Permissions</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {PERMISSIONS.map(perm => (
+                    <label key={perm.value} className="flex items-center gap-2 p-1.5 rounded border border-green-400/10 hover:bg-green-800/30 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={form.permissions.includes(perm.value)}
+                        onChange={() => handlePermissionToggle(perm.value)}
+                        className="w-4 h-4 rounded border-green-400/30 text-emerald-600 focus:ring-emerald-500"
+                      />
+                      <span className="text-xs text-green-100">{perm.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <input
             type="file"
             accept="image/*"

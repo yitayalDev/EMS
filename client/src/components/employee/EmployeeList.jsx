@@ -86,6 +86,7 @@ const EmployeeList = ({ highlightId }) => {
                   <th className="px-4 py-3 text-left">Image</th>
                   <th className="px-4 py-3 text-left">Name</th>
                   <th className="px-4 py-3 text-left">Department</th>
+                  <th className="px-4 py-3 text-left">Role</th>
                   <th className="px-4 py-3 text-left">Action</th>
                 </tr>
               </thead>
@@ -123,6 +124,16 @@ const EmployeeList = ({ highlightId }) => {
                     </td>
                     <td className="px-4 py-3 font-medium">{emp.name}</td>
                     <td className="px-4 py-3">{emp.department?.name || "-"}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm
+                        ${emp.user?.role === 'admin' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                          emp.user?.role === 'hr' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                            emp.user?.role === 'finance' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
+                              emp.user?.role === 'it_admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' :
+                                'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'}`}>
+                        {emp.user?.role || 'Employee'}
+                      </span>
+                    </td>
                     <td className="px-4 py-3 space-x-2">
                       <Link
                         to={`/admin/employees/${emp._id}`}
