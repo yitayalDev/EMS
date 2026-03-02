@@ -4,7 +4,7 @@ import api from '../../utils/api.js';
 import { useAuth } from '../../context/AuthContext';
 
 const SalaryList = () => {
-  const { user } = useAuth();
+  const { can } = useAuth();
   const [items, setItems] = useState([]);
 
   const load = async () => {
@@ -28,7 +28,7 @@ const SalaryList = () => {
         </h2>
 
         {/* Add Salary Button: neon green pulse with white text */}
-        {user?.role === 'admin' && (
+        {can('manage_salary') && (
           <Link
             to="/admin/salary/add"
             className="group px-6 py-3 text-sm font-semibold !text-white rounded-xl

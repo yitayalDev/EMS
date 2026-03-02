@@ -7,7 +7,7 @@ import { TableSkeleton } from "../common/SkeletonLoader.jsx";
 import { motion } from "framer-motion";
 
 const EmployeeList = ({ highlightId }) => {
-  const { user } = useAuth();
+  const { user, can } = useAuth();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
@@ -48,7 +48,7 @@ const EmployeeList = ({ highlightId }) => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white drop-shadow-sm">Employees</h2>
-        {user?.role === 'admin' && (
+        {can('manage_users') && (
           <Link
             to="/admin/employees/add"
             className="group flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-xl
@@ -130,7 +130,7 @@ const EmployeeList = ({ highlightId }) => {
                       >
                         View
                       </Link>
-                      {user?.role === 'admin' && (
+                      {can('manage_users') && (
                         <Link
                           to={`/admin/employees/${emp._id}/edit`}
                           className="text-xs text-green-600 dark:text-green-400 px-3 py-1.5 rounded-md bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors shadow-sm"
@@ -138,7 +138,7 @@ const EmployeeList = ({ highlightId }) => {
                           Edit
                         </Link>
                       )}
-                      {user?.role === 'admin' && (
+                      {can('delete_records') && (
                         <button
                           onClick={() => setConfirmDeleteId(emp._id)}
                           className="text-xs text-red-600 dark:text-red-400 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors shadow-sm"

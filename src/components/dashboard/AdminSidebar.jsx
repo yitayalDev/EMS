@@ -12,7 +12,7 @@ const linkClass = ({ isActive }) =>
 
 const AdminSidebar = () => {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, can } = useAuth();
   const { isOpen, closeSidebar } = useSidebar();
   // Vibrant, attractive gradient colors
   const gradients = [
@@ -34,15 +34,12 @@ const AdminSidebar = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const hasRole = (roles) => user && roles.includes(user.role);
-  const hasPermission = (perm) => user?.permissions?.includes(perm) || user?.role === 'admin';
-
-  const canViewAnalytics = hasRole(['admin', 'hr', 'finance']);
-  const canViewEmployees = hasRole(['admin', 'hr', 'it_admin']) || hasPermission('manage_users');
-  const canViewDepartments = hasRole(['admin', 'hr', 'it_admin']);
-  const canViewLeaves = hasRole(['admin', 'hr']) || hasPermission('manage_leaves');
-  const canViewSalary = hasRole(['admin', 'finance']) || hasPermission('view_salary') || hasPermission('manage_salary');
-  const canViewAttendance = hasRole(['admin', 'hr']);
+  const canViewAnalytics = can('view_analytics');
+  const canViewEmployees = can('manage_users');
+  const canViewDepartments = can('manage_departments');
+  const canViewLeaves = can('manage_leaves');
+  const canViewSalary = can('view_salary') || can('manage_salary');
+  const canViewAttendance = can('manage_attendance');
 
   return (
     <>
@@ -129,7 +126,7 @@ const AdminSidebar = () => {
               </NavLink>
             )}
 
-            {hasRole(['admin', 'finance']) && (
+            {(user?.role === 'admin' || user?.role === 'finance') && (
               <NavLink to="/admin/billing" className={linkClass}>
                 <CreditCard size={18} />
                 <span>{t('sidebar.billing')}</span>

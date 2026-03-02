@@ -4,7 +4,7 @@ import api from '../../utils/api.js';
 import { useAuth } from '../../context/AuthContext';
 
 const DepartmentList = () => {
-  const { user } = useAuth();
+  const { user, can } = useAuth();
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -79,7 +79,7 @@ const DepartmentList = () => {
         </h2>
 
         {/* Add Department Button (Green Neon) with White Text */}
-        {user?.role === 'admin' && (
+        {can('manage_departments') && (
           <Link
             to="/admin/departments/add"
             className="px-4 py-2 text-sm font-semibold rounded-lg
@@ -122,7 +122,7 @@ const DepartmentList = () => {
                       <td className="px-3 py-2">{i + 1}</td>
                       <td className="px-3 py-2">{d.name}</td>
                       <td className="px-3 py-2 space-x-2">
-                        {user?.role === 'admin' && (
+                        {can('manage_departments') && (
                           <Link
                             to={`/admin/departments/${d._id}/edit`}
                             className="text-xs text-amber-600 dark:text-amber-400 px-3 py-1.5 rounded-md bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors shadow-sm"
@@ -131,7 +131,7 @@ const DepartmentList = () => {
                           </Link>
                         )}
 
-                        {user?.role === 'admin' && (
+                        {can('manage_departments') && (
                           <button
                             onClick={() => handleDelete(d._id)}
                             className="text-xs text-red-600 dark:text-red-400 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors shadow-sm"

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api.js';
+import { useAuth } from '../../context/AuthContext';
 
 const LeaveList = () => {
+  const { can } = useAuth();
   const [leaves, setLeaves] = useState([]);
   const [deletingIds, setDeletingIds] = useState([]);
   const [toast, setToast] = useState(null);
@@ -162,7 +164,7 @@ const LeaveList = () => {
                       <Link to={`/admin/leaves/${l._id}`}>View</Link>
                     </ActionButton>
 
-                    {l.status === 'pending' && (
+                    {l.status === 'pending' && can('manage_leaves') && (
                       <>
                         <ActionButton
                           color="bg-emerald-100 text-emerald-700"
@@ -179,12 +181,14 @@ const LeaveList = () => {
                       </>
                     )}
 
-                    <ActionButton
-                      color="bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                      onClick={() => deleteLeave(l._id)}
-                    >
-                      Delete
-                    </ActionButton>
+                    {can('delete_records') && (
+                      <ActionButton
+                        color="bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                        onClick={() => deleteLeave(l._id)}
+                      >
+                        Delete
+                      </ActionButton>
+                    )}
                   </td>
                 </tr>
               ))}

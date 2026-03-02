@@ -23,16 +23,14 @@ import { useState, useEffect } from "react";
 import api from "../utils/api";
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
-  const hasRole = (roles) => user && roles.includes(user.role);
-  const hasPermission = (perm) => user?.permissions?.includes(perm) || user?.role === 'admin';
+  const { user, can } = useAuth();
 
-  const canViewAnalytics = hasRole(['admin', 'hr', 'finance']);
-  const canViewEmployees = hasRole(['admin', 'hr', 'it_admin']) || hasPermission('manage_users');
-  const canViewDepartments = hasRole(['admin', 'hr', 'it_admin']);
-  const canViewLeaves = hasRole(['admin', 'hr']) || hasPermission('manage_leaves');
-  const canViewSalary = hasRole(['admin', 'finance']) || hasPermission('view_salary') || hasPermission('manage_salary');
-  const canViewAttendance = hasRole(['admin', 'hr']);
+  const canViewAnalytics = can('view_analytics');
+  const canViewEmployees = can('manage_users');
+  const canViewDepartments = can('manage_departments');
+  const canViewLeaves = can('manage_leaves');
+  const canViewSalary = can('view_salary') || can('manage_salary');
+  const canViewAttendance = can('manage_attendance');
 
   return (
     <div className="flex bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200">
@@ -79,7 +77,7 @@ const AdminDashboard = () => {
               <Route path="attendance" element={<AttendanceList />} />
             )}
 
-            {(hasRole(['admin', 'finance'])) && (
+            {(user?.role === 'admin' || user?.role === 'finance') && (
               <Route path="billing" element={<BillingDashboard />} />
             )}
 

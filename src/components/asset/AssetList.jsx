@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { Package, Plus, Search, Trash2, UserPlus, MoreVertical, Edit } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const AssetList = () => {
+    const { can } = useAuth();
     const [assets, setAssets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -45,10 +47,12 @@ const AssetList = () => {
                     <p className="text-gray-500 text-sm">Track and manage company equipment and hardware.</p>
                 </div>
 
-                <button className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-indigo-200 active:scale-95">
-                    <Plus size={18} />
-                    <span>Add New Asset</span>
-                </button>
+                {can('manage_assets') && (
+                    <button className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-indigo-200 active:scale-95">
+                        <Plus size={18} />
+                        <span>Add New Asset</span>
+                    </button>
+                )}
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -118,12 +122,16 @@ const AssetList = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit">
-                                                    <Edit size={16} />
-                                                </button>
-                                                <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
-                                                    <Trash2 size={16} />
-                                                </button>
+                                                {can('manage_assets') && (
+                                                    <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit">
+                                                        <Edit size={16} />
+                                                    </button>
+                                                )}
+                                                {can('delete_records') && (
+                                                    <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

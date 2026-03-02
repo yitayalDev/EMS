@@ -14,8 +14,19 @@ const PERMISSIONS = [
     { value: 'delete_records', label: 'Delete Records (Employees etc)' },
     { value: 'view_salary', label: 'View Salary Records' },
     { value: 'manage_salary', label: 'Manage Salaries (Add/Edit)' },
-    { value: 'manage_leaves', label: 'Manage Leaves (Approve/Reject)' }
+    { value: 'manage_leaves', label: 'Manage Leaves (Approve/Reject)' },
+    { value: 'manage_assets', label: 'Manage Assets (Add/Edit/Delete)' },
+    { value: 'manage_notices', label: 'Manage Notices (Post/Delete)' },
+    { value: 'view_analytics', label: 'View Advanced Analytics' }
 ];
+
+const DEFAULT_MAP = {
+    admin: ['manage_users', 'delete_records', 'view_salary', 'manage_salary', 'manage_leaves', 'manage_assets', 'manage_notices', 'view_analytics'],
+    hr: ['manage_users', 'manage_leaves', 'manage_notices'],
+    finance: ['view_salary', 'manage_salary'],
+    it_admin: ['manage_assets', 'delete_records'],
+    employee: []
+};
 
 const AssignRoleModal = ({ employee, onClose, onUpdate }) => {
     const [role, setRole] = useState(employee?.user?.role || 'employee');
@@ -92,7 +103,11 @@ const AssignRoleModal = ({ employee, onClose, onUpdate }) => {
                         </label>
                         <select
                             value={role}
-                            onChange={(e) => setRole(e.target.value)}
+                            onChange={(e) => {
+                                const newRole = e.target.value;
+                                setRole(newRole);
+                                setPermissions(DEFAULT_MAP[newRole] || []);
+                            }}
                             className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2.5 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         >
                             {ROLES.map(r => (
