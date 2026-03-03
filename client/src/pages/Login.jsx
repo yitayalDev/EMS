@@ -134,13 +134,10 @@ const Login = () => {
           <p className="text-gray-300 text-xs uppercase tracking-widest font-bold mb-4">
             Explore Demo Dashboards
           </p>
-          <div className="grid grid-cols-2 gap-3 pb-4">
+          <div className="grid grid-cols-2 gap-4 pb-4">
             {[
-              { role: 'admin', label: 'Admin', color: 'bg-indigo-600' },
-              { role: 'hr', label: 'HR', color: 'bg-pink-600' },
-              { role: 'finance', label: 'Finance', color: 'bg-green-600' },
-              { role: 'it_admin', label: 'IT Admin', color: 'bg-cyan-600' },
-              { role: 'employee', label: 'Employee', color: 'bg-purple-600' },
+              { role: 'admin', label: 'Admin Dashboard', color: 'bg-indigo-600' },
+              { role: 'employee', label: 'Employee Dashboard', color: 'bg-purple-600' },
             ].map((demo) => (
               <button
                 key={demo.role}
