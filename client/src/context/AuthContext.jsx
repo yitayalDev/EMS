@@ -53,6 +53,16 @@ export const AuthProvider = ({ children }) => {
 
   const can = (permission) => {
     if (!user) return false;
+
+    // 🔹 Demo Mode Restrictions: Block specific management actions
+    if (user.isDemo) {
+      const restrictedPermissions = [
+        'manage_salary', 'manage_leaves', 'manage_departments',
+        'manage_users', 'delete_records', 'manage_assets', 'manage_notices'
+      ];
+      if (restrictedPermissions.includes(permission)) return false;
+    }
+
     if (user.role === 'admin') return true;
     return user.permissions?.includes(permission);
   };

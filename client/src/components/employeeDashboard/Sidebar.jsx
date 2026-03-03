@@ -61,9 +61,17 @@ const Sidebar = () => {
               <ShieldCheck className="text-gray-900" size={24} />
             </div>
           )}
-          <h2 className="font-bold text-lg text-gray-900 truncate">
-            {user?.companyName || 'EMS Pro'}
-          </h2>
+          <div className="flex flex-col truncate">
+            <h2 className="font-bold text-lg text-gray-900 truncate">
+              {user?.companyName || 'EMS Pro'}
+            </h2>
+            {user?.isDemo && (
+              <span className="text-[10px] bg-yellow-500 text-black px-1.5 py-0.5 rounded font-bold w-fit animate-pulse">
+                DEMO MODE
+              </span>
+            )}
+          </div>
+
         </div>
 
         {/* Glass Menu */}

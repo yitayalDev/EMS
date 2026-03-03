@@ -128,7 +128,52 @@ const Login = () => {
             </p>
           </div>
         </form>
+
+        {/* EXPLORE DEMO SECTION */}
+        <div className="mt-8 pt-6 border-t border-white/20 text-center">
+          <p className="text-gray-300 text-xs uppercase tracking-widest font-bold mb-4">
+            Explore Demo Dashboards
+          </p>
+          <div className="grid grid-cols-2 gap-3 pb-4">
+            {[
+              { role: 'admin', label: 'Admin', color: 'bg-indigo-600' },
+              { role: 'hr', label: 'HR', color: 'bg-pink-600' },
+              { role: 'finance', label: 'Finance', color: 'bg-green-600' },
+              { role: 'it_admin', label: 'IT Admin', color: 'bg-cyan-600' },
+              { role: 'employee', label: 'Employee', color: 'bg-purple-600' },
+            ].map((demo) => (
+              <button
+                key={demo.role}
+                onClick={async () => {
+                  setError('');
+                  setIsLoading(true);
+                  try {
+                    const { data } = await api.post('/auth/demo-login', { role: demo.role });
+                    login(data.user, data.token);
+                    if (data.user.role === 'admin' || ['hr', 'finance', 'it_admin'].includes(data.user.role)) {
+                      navigate('/admin/dashboard', { replace: true });
+                    } else {
+                      navigate('/employee/dashboard', { replace: true });
+                    }
+                  } catch (err) {
+                    setError(err.response?.data?.message || 'Demo access failed');
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+                disabled={isLoading}
+                className={`${demo.color} text-white text-[10px] py-2 rounded-lg font-bold shadow-md hover:scale-105 transition-transform active:scale-95 disabled:opacity-50`}
+              >
+                {demo.label}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-gray-400 italic">
+            * Data resets periodically. Restricted actions in demo mode.
+          </p>
+        </div>
       </div>
+
 
       <style>
         {`

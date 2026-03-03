@@ -69,9 +69,17 @@ const AdminSidebar = () => {
                 <ShieldCheck className="text-white" size={24} />
               </div>
             )}
-            <h2 className="font-bold text-lg text-white truncate">
-              {user?.companyName || 'EMS Pro'}
-            </h2>
+            <div className="flex flex-col truncate">
+              <h2 className="font-bold text-lg text-white truncate">
+                {user?.companyName || 'EMS Pro'}
+              </h2>
+              {user?.isDemo && (
+                <span className="text-[10px] bg-yellow-500 text-black px-1.5 py-0.5 rounded font-bold w-fit animate-pulse">
+                  DEMO MODE
+                </span>
+              )}
+            </div>
+
           </div>
           <nav className="p-4 space-y-1 flex-1">
             <NavLink to="/admin" end className={linkClass}>

@@ -34,6 +34,11 @@ api.interceptors.response.use(
         }
       }
 
+      // Show alert for demo restrictions
+      if (status === 403 && data.isDemo) {
+        alert(data.message || 'Action restricted in Demo Mode.');
+      }
+
       // Redirect to billing on 403 (Forbidden - Inactive Subscription)
       if (status === 403 && data.billingUrl) {
         window.location.href = data.billingUrl;
